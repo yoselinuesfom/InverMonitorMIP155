@@ -1,0 +1,121 @@
+
+  /* NAVBAR */
+  .nav-barra {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 0 5%;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--borde-sutil);
+    background: rgba(6, 14, 9, 0.85);
+    backdrop-filter: blur(20px);
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo-icono {
+    width: 36px; height: 36px;
+    border: 1px solid var(--verde-claro);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .nav-logo-icono::before {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    border: 2px solid var(--verde-neon);
+    border-radius: 50%;
+    animation: pulso-logo 2s ease-in-out infinite;
+  }
+  .nav-logo-icono::after {
+    content: '';
+    position: absolute;
+    width: 6px; height: 6px;
+    background: var(--verde-neon);
+    border-radius: 50%;
+    animation: pulso-logo 2s ease-in-out infinite 0.5s;
+  }
+  @keyframes pulso-logo {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+  }
+  .nav-logo-texto {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--texto-principal);
+    letter-spacing: -0.5px;
+  }
+  .nav-logo-texto span { color: var(--verde-claro); }
+
+  .nav-enlaces {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-enlace {
+    color: var(--texto-secundario);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-enlace::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; left: 0;
+    width: 0; height: 1px;
+    background: var(--verde-claro);
+    transition: width 0.3s;
+  }
+  .nav-enlace:hover { color: var(--texto-principal); }
+  .nav-enlace:hover::after { width: 100%; }
+
+  .nav-acciones {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .btn-nav-login {
+    padding: 8px 20px;
+    border: 1px solid var(--borde-activo);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--verde-claro);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-nav-login:hover {
+    background: rgba(46, 204, 113, 0.1);
+  }
+  .btn-nav-registro {
+    padding: 8px 20px;
+    border-radius: 6px;
+    background: var(--verde-principal);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+  }
+  .btn-nav-registro:hover {
+    background: var(--verde-claro);
+    color: var(--fondo-oscuro);
+  }

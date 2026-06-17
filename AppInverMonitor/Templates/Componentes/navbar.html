@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}InverMonitor - Tu aliado en el cuidado de tus plantas{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'Componentes/CSS/sidebar.css' %}">
+
+<!-- NAVBAR -->
+<nav class="nav-barra">
+  <a href="{% url 'home' %}" class="nav-logo">
+    <div class="nav-logo-icono">
+      <img src="{% static 'IMG/logo.png' %}" alt="InverMonitor Logo" class="nav-logo-icono">
+    </div>
+
+    <span class="nav-logo-texto">Inver<span>Monitor</span></span>
+  </a>
+
+  <!-- MENÚ PARA USUARIOS NO AUTENTICADOS -->
+  <ul class="nav-enlaces">
+    <li><a href="#descripcion" class="nav-enlace">Descripción</a></li>
+    <li><a href="#caracteristicas" class="nav-enlace">Características</a></li>
+    <li><a href="#alertas" class="nav-enlace">Alertas</a></li>
+    <li><a href="#contacto" class="nav-enlace">Contacto</a></li>
+  </ul>
+
+  <div class="nav-acciones">
+    <a href="{% url 'login' %}" class="btn-nav-login">Iniciar sesión</a>
+    <a href="{% url 'register' %}" class="btn-nav-registro">Registrarse</a>
+  </div>
+
+</nav>
+{% endblock %}

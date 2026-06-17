@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'CSS/home.css' %}">
+{% endblock %}
+z
+{% block content %}
+  <div class="fondo-cuadricula"></div>
+  <div class="fondo-brillo" id="brilloFondo"></div>
+
+  {% include 'Componentes/navbar.html' %}
+
+  <section class="seccion-heroe">
+    <div class="heroe-contenido">
+      <div class="heroe-etiqueta">
+        <span class="heroe-etiqueta-punto"></span>
+        MONITOREO EN TIEMPO REAL
+      </div>
+      <h1 class="heroe-titulo">
+        Tu invernadero,<br>
+        <span class="heroe-titulo-verde">siempre</span><br>
+        <span class="heroe-titulo-tenue">bajo control.</span>
+      </h1>
+      <p class="heroe-descripcion">
+        InverMonitor supervisa en tiempo real la temperatura, humedad y luminosidad
+        de tu invernadero. Recibe alertas inteligentes y mantén el ambiente perfecto
+        para tus cultivos.
+      </p>
+      <div class="heroe-acciones">
+        <a href="#" class="btn-primario">⚡ Comenzar gratis</a>
+        <a href="#descripcion" class="btn-secundario">Ver más ↓</a>
+      </div>
+    </div>
+
+    <div class="panel-metricas">
+      <div class="panel-metricas-cabecera">
+        <span class="panel-metricas-titulo">INVERNADERO #1</span>
+        <span class="panel-estado-vivo">
+          <span class="punto-vivo"></span>
+          EN VIVO
+        </span>
+      </div>
+      <div class="metrica-fila">
+        <div class="metrica-icono-circulo temperatura"><i class="bi bi-thermometer-half"></i></div>
+        <div class="metrica-info">
+          <div class="metrica-nombre">TEMPERATURA</div>
+          <div class="metrica-valor" id="valorTemp">24.3°C</div>
+          <div class="metrica-barra-fondo">
+            <div class="metrica-barra-relleno barra-temperatura" id="barraTemp" style="width: 62%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="metrica-fila">
+        <div class="metrica-icono-circulo humedad"><i class="bi bi-moisture"></i></div>
+        <div class="metrica-info">
+          <div class="metrica-nombre">HUMEDAD</div>
+          <div class="metrica-valor" id="valorHum">78%</div>
+          <div class="metrica-barra-fondo">
+            <div class="metrica-barra-relleno barra-humedad" id="barraHum" style="width: 78%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="metrica-fila">
+        <div class="metrica-icono-circulo luminosidad"><i class="bi bi-brightness-high-fill"></i></div>
+        <div class="metrica-info">
+          <div class="metrica-nombre">LUMINOSIDAD</div>
+          <div class="metrica-valor" id="valorLum">4.2 klx</div>
+          <div class="metrica-barra-fondo">
+            <div class="metrica-barra-relleno barra-luminosidad" id="barraLum" style="width: 55%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion-estadisticas">
+    <div class="estadisticas-grilla">
+      <div class="estadistica-item">
+        <span class="estadistica-numero" data-objetivo="500">0</span>
+        <span class="estadistica-label">Invernaderos monitoreados</span>
+      </div>
+      <div class="estadistica-item">
+        <span class="estadistica-numero" data-objetivo="99" data-sufijo=".9%">0</span>
+        <span class="estadistica-label">Disponibilidad del sistema</span>
+      </div>
+      <div class="estadistica-item">
+        <span class="estadistica-numero" data-objetivo="3" data-sufijo=" sen.">0</span>
+        <span class="estadistica-label">Sensores por invernadero</span>
+      </div>
+      <div class="estadistica-item">
+        <span class="estadistica-numero" data-objetivo="24" data-sufijo="/7">0</span>
+        <span class="estadistica-label">Monitoreo continuo</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion-descripcion" id="descripcion">
+    <div class="descripcion-encabezado animar-entrada">
+      <div class="descripcion-lado-izq">
+        <span class="etiqueta-seccion">// SOBRE EL PROYECTO</span>
+        <h2 class="titulo-seccion">¿Qué es <span style="color: var(--verde-claro)">InverMonitor</span>?</h2>
+        <p class="descripcion-texto">
+          InverMonitor es una plataforma de monitoreo ambiental diseñada para invernaderos.
+          Integra sensores IoT con una interfaz web intuitiva para darte visibilidad total
+          del entorno de tus cultivos, desde cualquier lugar y en cualquier momento.
+        </p>
+        <p class="descripcion-texto">
+          El sistema recopila datos de temperatura, humedad relativa y niveles de luminosidad
+          en intervalos configurables, generando historiales, gráficas de tendencia y alertas
+          automáticas cuando los parámetros salen del rango óptimo.
+        </p>
+      </div>
+      <div class="descripcion-lado-der">
+        <span class="etiqueta-seccion">// PARA QUIÉN</span>
+        <h2 class="titulo-seccion">Cultivos más <span style="color: var(--verde-claro)">inteligentes</span></h2>
+        <p class="descripcion-texto">
+          Tanto para productores agrícolas que buscan optimizar sus cosechas, como para
+          investigadores y estudiantes que necesitan datos ambientales precisos, InverMonitor
+          ofrece una solución accesible y profesional.
+        </p>
+        <p class="descripcion-texto">
+          Conecta tus sensores, configura tus umbrales de alerta, y deja que el sistema
+          trabaje por ti. Recibirás notificaciones en tiempo real y tendrás acceso a reportes
+          detallados para tomar las mejores decisiones para tus plantas.
+        </p>
+      </div>
+    </div>
+
+    <div id="caracteristicas">
+      <span class="etiqueta-seccion" style="display: block; margin-bottom: 16px;">// FUNCIONALIDADES</span>
+      <h2 class="titulo-seccion" style="margin-bottom: 48px;">
+        Todo lo que <span style="color: var(--verde-claro)">necesitas</span>
+      </h2>
+      <div class="caracteristicas-grilla">
+        <div class="tarjeta-caracteristica animar-entrada">
+          <span class="caracteristica-emoji"><i class="bi bi-thermometer"></i></span>
+          <h3 class="caracteristica-titulo">Temperatura en tiempo real</h3>
+          <p class="caracteristica-descripcion">
+            Monitoreo continuo de la temperatura ambiente. Configura rangos óptimos
+            y recibe alertas inmediatas ante variaciones que puedan afectar tus cultivos.
+          </p>
+        </div>
+        <div class="tarjeta-caracteristica animar-entrada">
+          <span class="caracteristica-emoji"><i class="bi bi-moisture"></i></span>
+          <h3 class="caracteristica-titulo">Control de humedad</h3>
+          <p class="caracteristica-descripcion">
+            Supervisa la humedad relativa del aire dentro del invernadero. Datos precisos
+            para mantener el ambiente adecuado según el tipo de cultivo.
+          </p>
+        </div>
+        <div class="tarjeta-caracteristica animar-entrada">
+          <span class="caracteristica-emoji"><i class="bi bi-brightness-high-fill"></i></span>
+          <h3 class="caracteristica-titulo">Medición de luminosidad</h3>
+          <p class="caracteristica-descripcion">
+            Registro de niveles de luz en kilolux. Asegúrate de que tus plantas reciban
+            la cantidad exacta de luz solar o artificial que necesitan para crecer.
+          </p>
+        </div>
+        <div class="tarjeta-caracteristica animar-entrada">
+          <span class="caracteristica-emoji"><i class="bi bi-bell-fill"></i></span>
+          <h3 class="caracteristica-titulo">Alertas automáticas</h3>
+          <p class="caracteristica-descripcion">
+            Sistema de notificaciones configurable. Recibe alertas por correo o en la
+            aplicación cuando cualquier parámetro supere los límites establecidos.
+          </p>
+        </div>
+        <div class="tarjeta-caracteristica animar-entrada">
+          <span class="caracteristica-emoji"><i class="bi bi-bar-chart"></i></span>
+          <h3 class="caracteristica-titulo">Historial y reportes</h3>
+          <p class="caracteristica-descripcion">
+            Accede a gráficas de tendencias históricas. Exporta reportes en PDF para
+            analizar el comportamiento ambiental a lo largo del tiempo.
+          </p>
+        </div>
+        <div class="tarjeta-caracteristica animar-entrada">
+          <span class="caracteristica-emoji"><i class="bi bi-ethernet"></i></span>
+          <h3 class="caracteristica-titulo">Conexión IoT</h3>
+          <p class="caracteristica-descripcion">
+            Compatible con sensores IoT estándar. Configuración sencilla para integrar
+            tu hardware existente y comenzar a recopilar datos en minutos.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion-alertas" id="alertas">
+    <div class="alertas-contenido">
+      <div class="animar-entrada">
+        <span class="etiqueta-seccion">// SISTEMA DE ALERTAS</span>
+        <h2 class="titulo-seccion">Siempre <span style="color: var(--verde-claro)">informado</span></h2>
+        <p style="color: var(--texto-secundario); line-height: 1.8; margin-top: 16px;">
+          InverMonitor analiza constantemente las lecturas de tus sensores y genera alertas
+          clasificadas por severidad. Así puedes actuar a tiempo antes de que los problemas afecten tus cultivos.
+        </p>
+        <p style="color: var(--texto-secundario); line-height: 1.8; margin-top: 12px;">
+          Cada alerta incluye marca de tiempo, valor registrado y recomendación de acción
+          para que sepas exactamente qué hacer.
+        </p>
+      </div>
+      <div class="alerta-demo animar-entrada">
+        <div class="alerta-item alerta-peligro"><i class="bi bi-exclamation-circle"></i>
+           Temperatura crítica: 38.7°C
+          <span class="alerta-mono">14:32</span>
+        </div>
+        <div class="alerta-item alerta-advertencia">
+          <i class="bi bi-dash-circle-fill"></i>
+           Humedad baja: 41% (mín. 50%)
+          <span class="alerta-mono">14:28</span>
+        </div>
+        <div class="alerta-item alerta-ok"><i class="bi bi-check-square-fill"></i>
+          Luminosidad en rango óptimo
+          <span class="alerta-mono">14:25</span>
+        </div>
+        <div class="alerta-item alerta-ok"><i class="bi bi-check-square-fill"></i>
+          Temperatura estabilizada: 26.1°C
+          <span class="alerta-mono">14:20</span>
+        </div>
+        <div class="alerta-item alerta-advertencia"><i class="bi bi-dash-circle-fill"></i>
+           Luminosidad alta: 9.8 klx
+          <span class="alerta-mono">13:55</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion-cta" id="contacto">
+    <div class="cta-caja animar-entrada">
+      <h2 class="cta-titulo">
+        Empieza a monitorear<br>
+        <span style="color: var(--verde-claro)">hoy mismo</span>
+      </h2>
+      <p class="cta-descripcion">
+        Crea tu cuenta gratuita y conecta tu invernadero en minutos.
+        Sin tarjeta de crédito, sin complicaciones.
+      </p>
+      <div class="cta-botones">
+        <a href="#" class="btn-cta-registro">Registrarse gratis</a>
+        <a href="#" class="btn-cta-login">Iniciar sesión</a>
+      </div>
+    </div>
+  </section>
+
+  {% include 'Componentes/footer.html' %}
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'JS/home.js' %}"></script>
+{% endblock %}

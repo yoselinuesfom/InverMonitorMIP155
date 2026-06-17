@@ -1,0 +1,17 @@
+:root {
+  --verde-principal: #1a7a4a;
+  --verde-claro: #2ecc71;
+  --verde-oscuro: #0d4a2a;
+  --verde-neon: #39ff8f;
+  --fondo-oscuro: #060e09;
+  --fondo-panel: #0d1f12;
+  --fondo-tarjeta: #111f15;
+  --texto-principal: #e8f5ec;
+  --texto-secundario: #7aab8a;
+  --texto-tenue: #3d6e4f;
+  --borde-sutil: rgba(46, 204, 113, 0.15);
+  --borde-activo: rgba(46, 204, 113, 0.5);
+  --acento-ambar: #f0a500;
+  --acento-azul: #3daaf0;
+}
+

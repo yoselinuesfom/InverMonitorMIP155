@@ -1,0 +1,403 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'CSS/dashboard.css' %}">
+
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-marca">
+        <img src="{% static 'IMG/logo.png' %}" alt="InverMonitor Logo" class="nav-logo-icono">
+        <span>Inver<strong>Monitor</strong></span>
+    </div>
+    <nav class="sidebar-nav">
+        <p class="etiqueta-grupo">Principal</p>
+        <a href="#" class="item-nav activo">
+            <i class="bi bi-grid-1x2"></i><span>Dashboard</span>
+        </a>
+        <a href="{% url 'temperatura' %}" class="item-nav">
+            <i class="bi bi-thermometer-half"></i><span>Temperatura</span>
+        </a>
+        <a href="{% url 'humedad' %}" class="item-nav">
+            <i class="bi bi-droplet-half"></i><span>Humedad</span>
+        </a>
+        <a href="{% url 'humedadSuelo' %}" class="item-nav">
+            <i class="bi bi-moisture"></i><span>Humedad del suelo</span>
+        </a>
+        <a href="{% url 'luminosidad' %}" class="item-nav">
+            <i class="bi bi-brightness-high"></i><span>Luminosidad</span>
+        </a>
+        <a href="{% url 'humedadSuelo' %}" class="item-nav">
+            <i class="bi bi-moisture"></i><span>Humedad del suelo</span>
+        </a>
+
+        <p class="etiqueta-grupo">Análisis</p>
+        <a href="{% url 'estadistica' %}" class="item-nav">
+            <i class="bi bi-bar-chart-line"></i><span>Estadísticas</span>
+        </a>
+        <a href="{% url 'historial' %}" class="item-nav">
+            <i class="bi bi-clock-history"></i><span>Historial</span>
+        </a>
+        <a href="{% url 'notificaciones'%}" class="item-nav">
+            <i class="bi bi-bell"></i><span>Alertas</span>
+        </a>
+
+        <p class="etiqueta-grupo">Sistema</p>
+        <a href="{% url 'perfil' %}" class="item-nav">
+            <i class="bi bi-person"></i><span>Perfil</span>
+        </a>
+        <a href="{% url 'configuracion' %}" class="item-nav">
+            <i class="bi bi-gear"></i><span>Configuración</span>
+        </a>
+        <a href="{% url 'documentacion' %}" class="item-nav">
+            <i class="bi bi-book"></i><span>Documentación</span>
+        </a>
+        <a href="{% url 'desarrolladores'%}" class="item-nav">
+            <i class="bi bi-people"></i><span>Desarrolladores</span>
+        </a>
+    </nav>
+    <div class="pie-sidebar">
+        <form method="POST" action="{% url 'logout' %}" style="width:100%;">
+            {% csrf_token %}
+            <button type="submit" class="boton-salir">
+                <i class="bi bi-box-arrow-left"></i><span>Cerrar sesión</span>
+            </button>
+        </form>
+    </div>
+</aside>
+
+<main class="main" id="main">
+
+    <header class="topbar">
+        <div class="topbar-izquierda">
+            <button class="boton-sidebar" id="sidebarToggle" aria-label="Toggle sidebar">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="topbar-titulo">
+                <h1 class="titulo-pagina">Dashboard</h1>
+                <p class="subtitulo-pagina" id="currentDate"></p>
+            </div>
+        </div>
+        <div class="topbar-derecha">
+            <button class="boton-tema" id="botonTema" title="Cambiar tema"><i class="bi bi-brightness-high-fill"></i></button>
+            <div class="reloj-topbar" id="clockDisplay">00:00:00</div>
+            <div class="usuario-topbar">
+                <div class="info-usuario">
+                    <span class="nombre-usuario">{{ user.get_full_name|default:user.username }}</span>
+                    <span class="rol-usuario"></span>
+                </div>
+                <div class="avatar-usuario">
+                    {% if user.profile.photo %}
+                        <img src="{{ user.profile.photo.url }}" alt="Foto de perfil">
+                    {% else %}
+                        <i class="bi bi-person-fill"></i>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="contenido">
+
+        <!-- ── Estado del sistema ── -->
+        <section class="seccion">
+            <div class="cabecera-seccion">
+                <p class="etiqueta-seccion">Sistema</p>
+                <h2 class="titulo-seccion">Estado general</h2>
+            </div>
+            <div class="grilla-estado">
+                <div class="tarjeta-estado estado-ok">
+                    <div class="tarjeta-estado__icono"><i class="bi bi-check-circle"></i></div>
+                    <div class="tarjeta-estado__cuerpo">
+                        <p class="tarjeta-estado__etiqueta">Sistema</p>
+                        <p class="tarjeta-estado__valor">Operativo</p>
+                    </div>
+                </div>
+                <div class="tarjeta-estado estado-ok">
+                    <div class="tarjeta-estado__icono"><i class="bi bi-cpu"></i></div>
+                    <div class="tarjeta-estado__cuerpo">
+                        <p class="tarjeta-estado__etiqueta">Raspberry Pi</p>
+                        <p class="tarjeta-estado__valor">Conectada</p>
+                    </div>
+                </div>
+                <div class="tarjeta-estado estado-ok">
+                    <div class="tarjeta-estado__icono"><i class="bi bi-broadcast"></i></div>
+                    <div class="tarjeta-estado__cuerpo">
+                        <p class="tarjeta-estado__etiqueta">Sensores</p>
+                        <p class="tarjeta-estado__valor">En línea</p>
+                    </div>
+                </div>
+                <div class="tarjeta-estado estado-ok">
+                    <div class="tarjeta-estado__icono"><i class="bi bi-database-check"></i></div>
+                    <div class="tarjeta-estado__cuerpo">
+                        <p class="tarjeta-estado__etiqueta">Base de datos</p>
+                        <p class="tarjeta-estado__valor">Sincronizada</p>
+                    </div>
+                </div>
+                <div class="tarjeta-estado estado-neutral">
+                    <div class="tarjeta-estado__icono"><i class="bi bi-arrow-clockwise"></i></div>
+                    <div class="tarjeta-estado__cuerpo">
+                        <p class="tarjeta-estado__etiqueta">Última actualización</p>
+                        <p class="tarjeta-estado__valor">
+                            {% if ultimo %}{{ ultimo.fecha_hora|timesince }} atrás{% else %}Sin datos{% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Indicadores del día ── -->
+        <section class="seccion">
+            <div class="cabecera-seccion">
+                <p class="etiqueta-seccion">Resumen</p>
+                <h2 class="titulo-seccion">Indicadores del día</h2>
+            </div>
+            <div class="grilla-rapida">
+                <div class="tarjeta-rapida">
+                    <i class="bi bi-activity tarjeta-rapida__icono icono-azul"></i>
+                    <p class="tarjeta-rapida__numero">{{ total_lecturas_hoy }}</p>
+                    <p class="tarjeta-rapida__etiqueta">Lecturas hoy</p>
+                </div>
+                <div class="tarjeta-rapida">
+                    <i class="bi bi-thermometer-half tarjeta-rapida__icono icono-rojo"></i>
+                    <p class="tarjeta-rapida__numero">{{ stats_hoy.temp_avg|floatformat:1|default:"—" }}°C</p>
+                    <p class="tarjeta-rapida__etiqueta">Temp. promedio hoy</p>
+                </div>
+                <div class="tarjeta-rapida">
+                    <i class="bi bi-droplet tarjeta-rapida__icono icono-azul"></i>
+                    <p class="tarjeta-rapida__numero">{{ stats_hoy.hum_avg|floatformat:1|default:"—" }}%</p>
+                    <p class="tarjeta-rapida__etiqueta">Hum. promedio hoy</p>
+                </div>
+                <div class="tarjeta-rapida">
+                    <i class="bi bi-brightness-high tarjeta-rapida__icono icono-ambar"></i>
+                    <p class="tarjeta-rapida__numero">{{ stats_hoy.lux_avg|floatformat:0|default:"—" }}</p>
+                    <p class="tarjeta-rapida__etiqueta">Lux promedio hoy</p>
+                </div>
+                <div class="tarjeta-rapida">
+                    <i class="bi bi-moisture tarjeta-rapida__icono icono-verde"></i>
+                    <p class="tarjeta-rapida__numero">{{ stats_hoy.suelo_avg|floatformat:1|default:"—" }}%</p>
+                    <p class="tarjeta-rapida__etiqueta">Suelo promedio hoy</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Variables monitoreadas ── -->
+        <section class="seccion">
+            <div class="cabecera-seccion">
+                <p class="etiqueta-seccion">Tiempo real</p>
+                <h2 class="titulo-seccion">Variables monitoreadas</h2>
+            </div>
+            <div class="grilla-variables">
+
+                <!-- Temperatura -->
+                <div class="tarjeta-variable">
+                    <div class="cabecera-variable">
+                        <div class="icono-variable fondo-rojo"><i class="bi bi-thermometer-half"></i></div>
+                        <div>
+                            <p class="etiqueta-variable">Temperatura</p>
+                            <p class="tendencia-variable {% if tendencias.temp > 0 %}tendencia-sube{% elif tendencias.temp < 0 %}tendencia-baja{% else %}tendencia-estable{% endif %}">
+                                {% if tendencias.temp > 0 %}<i class="bi bi-arrow-up-short"></i> +{{ tendencias.temp }}°C
+                                {% elif tendencias.temp < 0 %}<i class="bi bi-arrow-down-short"></i> {{ tendencias.temp }}°C
+                                {% else %}<i class="bi bi-dash"></i> Estable{% endif %}
+                                vs lectura anterior
+                            </p>
+                        </div>
+                    </div>
+                    <p class="valor-variable">{{ ultimo.temperatura|floatformat:1|default:"—" }}<span class="unidad-variable">°C</span></p>
+                    <div class="estadisticas-variable">
+                        <div><p class="etiqueta-stat">Máx. hoy</p><p class="valor-stat">{{ stats_hoy.temp_max|floatformat:1|default:"—" }}°C</p></div>
+                        <div><p class="etiqueta-stat">Mín. hoy</p><p class="valor-stat">{{ stats_hoy.temp_min|floatformat:1|default:"—" }}°C</p></div>
+                        <div><p class="etiqueta-stat">Promedio</p><p class="valor-stat">{{ stats_hoy.temp_avg|floatformat:1|default:"—" }}°C</p></div>
+                    </div>
+                </div>
+
+                <!-- Humedad aire -->
+                <div class="tarjeta-variable">
+                    <div class="cabecera-variable">
+                        <div class="icono-variable fondo-azul"><i class="bi bi-droplet-half"></i></div>
+                        <div>
+                            <p class="etiqueta-variable">Humedad</p>
+                            <p class="tendencia-variable {% if tendencias.hum > 0 %}tendencia-sube{% elif tendencias.hum < 0 %}tendencia-baja{% else %}tendencia-estable{% endif %}">
+                                {% if tendencias.hum > 0 %}<i class="bi bi-arrow-up-short"></i> +{{ tendencias.hum }}%
+                                {% elif tendencias.hum < 0 %}<i class="bi bi-arrow-down-short"></i> {{ tendencias.hum }}%
+                                {% else %}<i class="bi bi-dash"></i> Estable{% endif %}
+                                vs lectura anterior
+                            </p>
+                        </div>
+                    </div>
+                    <p class="valor-variable">{{ ultimo.humedad|floatformat:1|default:"—" }}<span class="unidad-variable">%</span></p>
+                    <div class="estadisticas-variable">
+                        <div><p class="etiqueta-stat">Máx. hoy</p><p class="valor-stat">{{ stats_hoy.hum_max|floatformat:1|default:"—" }}%</p></div>
+                        <div><p class="etiqueta-stat">Mín. hoy</p><p class="valor-stat">{{ stats_hoy.hum_min|floatformat:1|default:"—" }}%</p></div>
+                        <div><p class="etiqueta-stat">Promedio</p><p class="valor-stat">{{ stats_hoy.hum_avg|floatformat:1|default:"—" }}%</p></div>
+                    </div>
+                </div>
+
+                <!-- Humedad suelo -->
+                <div class="tarjeta-variable">
+                    <div class="cabecera-variable">
+                        <div class="icono-variable fondo-verde"><i class="bi bi-moisture"></i></div>
+                        <div>
+                            <p class="etiqueta-variable">Humedad del suelo</p>
+                            <p class="tendencia-variable {% if tendencias.suelo > 0 %}tendencia-sube{% elif tendencias.suelo < 0 %}tendencia-baja{% else %}tendencia-estable{% endif %}">
+                                {% if tendencias.suelo > 0 %}<i class="bi bi-arrow-up-short"></i> +{{ tendencias.suelo }}%
+                                {% elif tendencias.suelo < 0 %}<i class="bi bi-arrow-down-short"></i> {{ tendencias.suelo }}%
+                                {% else %}<i class="bi bi-dash"></i> Estable{% endif %}
+                                vs lectura anterior
+                            </p>
+                        </div>
+                    </div>
+                    <p class="valor-variable">{{ ultimo.humedad_suelo|floatformat:1|default:"—" }}<span class="unidad-variable">%</span></p>
+                    <div class="estadisticas-variable">
+                        <div><p class="etiqueta-stat">Máx. hoy</p><p class="valor-stat">{{ stats_hoy.suelo_max|floatformat:1|default:"—" }}%</p></div>
+                        <div><p class="etiqueta-stat">Mín. hoy</p><p class="valor-stat">{{ stats_hoy.suelo_min|floatformat:1|default:"—" }}%</p></div>
+                        <div><p class="etiqueta-stat">Promedio</p><p class="valor-stat">{{ stats_hoy.suelo_avg|floatformat:1|default:"—" }}%</p></div>
+                    </div>
+                </div>
+
+                <!-- Luminosidad -->
+                <div class="tarjeta-variable">
+                    <div class="cabecera-variable">
+                        <div class="icono-variable fondo-ambar"><i class="bi bi-brightness-high"></i></div>
+                        <div>
+                            <p class="etiqueta-variable">Luminosidad</p>
+                            <p class="tendencia-variable {% if tendencias.lux > 0 %}tendencia-sube{% elif tendencias.lux < 0 %}tendencia-baja{% else %}tendencia-estable{% endif %}">
+                                {% if tendencias.lux > 0 %}<i class="bi bi-arrow-up-short"></i> +{{ tendencias.lux }} lux
+                                {% elif tendencias.lux < 0 %}<i class="bi bi-arrow-down-short"></i> {{ tendencias.lux }} lux
+                                {% else %}<i class="bi bi-dash"></i> Estable{% endif %}
+                                vs lectura anterior
+                            </p>
+                        </div>
+                    </div>
+                    <p class="valor-variable">{{ ultimo.luminosidad|default:"—" }}<span class="unidad-variable">lux</span></p>
+                    <div class="estadisticas-variable">
+                        <div><p class="etiqueta-stat">Máx. hoy</p><p class="valor-stat">{{ stats_hoy.lux_max|default:"—" }} lux</p></div>
+                        <div><p class="etiqueta-stat">Mín. hoy</p><p class="valor-stat">{{ stats_hoy.lux_min|default:"—" }} lux</p></div>
+                        <div><p class="etiqueta-stat">Promedio</p><p class="valor-stat">{{ stats_hoy.lux_avg|floatformat:0|default:"—" }} lux</p></div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ── Gráficas ── -->
+        <section class="seccion">
+            <div class="cabecera-seccion">
+                <p class="etiqueta-seccion">Últimas 12 horas</p>
+                <h2 class="titulo-seccion">Gráficas resumen</h2>
+            </div>
+            <div class="grilla-graficas">
+                <div class="tarjeta-grafica">
+                    <div class="cabecera-grafica">
+                        <div class="titulo-grafica"><i class="bi bi-thermometer-half icono-rojo"></i> Temperatura</div>
+                        <a href="{% url 'temperatura' %}" class="enlace-grafica">Ver módulo <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                    <canvas id="chartTemp" height="140"></canvas>
+                </div>
+                <div class="tarjeta-grafica">
+                    <div class="cabecera-grafica">
+                        <div class="titulo-grafica"><i class="bi bi-droplet-half icono-azul"></i> Humedad</div>
+                        <a href="{% url 'humedad' %}" class="enlace-grafica">Ver módulo <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                    <canvas id="chartHum" height="140"></canvas>
+                </div>
+                <div class="tarjeta-grafica">
+                    <div class="cabecera-grafica">
+                        <div class="titulo-grafica"><i class="bi bi-moisture icono-verde"></i> Humedad del suelo</div>
+                        <a href="#" class="enlace-grafica">Ver módulo <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                    <canvas id="chartSuelo" height="140"></canvas>
+                </div>
+                <div class="tarjeta-grafica">
+                    <div class="cabecera-grafica">
+                        <div class="titulo-grafica"><i class="bi bi-brightness-high icono-ambar"></i> Luminosidad</div>
+                        <a href="{% url 'luminosidad' %}" class="enlace-grafica">Ver módulo <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                    <canvas id="chartLux" height="140"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Últimas lecturas ── -->
+        <section class="seccion">
+            <div class="cabecera-seccion">
+                <p class="etiqueta-seccion">Sensor</p>
+                <h2 class="titulo-seccion">Últimas lecturas</h2>
+            </div>
+            <div class="tarjeta-tabla">
+                <table class="tabla-datos">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th><i class="bi bi-thermometer-half icono-rojo"></i> Temp.</th>
+                            <th><i class="bi bi-droplet icono-azul"></i> Hum.</th>
+                            <th><i class="bi bi-moisture icono-verde"></i> Suelo</th>
+                            <th><i class="bi bi-brightness-high icono-ambar"></i> Lux.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in ultimas_lecturas %}
+                        <tr>
+                            <td class="celda-mono">{{ r.fecha_hora|date:"d/m/Y" }}</td>
+                            <td class="celda-mono">{{ r.fecha_hora|date:"H:i" }}</td>
+                            <td>{{ r.temperatura|floatformat:1 }}°C</td>
+                            <td>{{ r.humedad|floatformat:1 }}%</td>
+                            <td>{{ r.humedad_suelo|floatformat:1 }}%</td>
+                            <td>{{ r.luminosidad }} lx</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="6" style="text-align:center; padding:1rem;">Sin lecturas aún</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </div><!-- /contenido -->
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'JS/dashboard.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const labels    = {{ labels|safe }};
+    const dataTemp  = {{ data_temp|safe }};
+    const dataHum   = {{ data_hum|safe }};
+    const dataLux   = {{ data_lux|safe }};
+    const dataSuelo = {{ data_suelo|safe }};
+
+    function makeChart(id, label, data, color) {
+        const ctx = document.getElementById(id);
+        if (!ctx) return;
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: label,
+                    data: data,
+                    borderColor: color,
+                    backgroundColor: color + '33',
+                    borderWidth: 2,
+                    pointRadius: 2,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { x: { ticks: { maxTicksLimit: 6 } } }
+            }
+        });
+    }
+
+    makeChart('chartTemp',  'Temperatura',     dataTemp,  '#ef4444');
+    makeChart('chartHum',   'Humedad',         dataHum,   '#3b82f6');
+    makeChart('chartSuelo', 'Humedad Suelo',   dataSuelo, '#22c55e');
+    makeChart('chartLux',   'Luminosidad',     dataLux,   '#f59e0b');
+</script>
+{% endblock %}

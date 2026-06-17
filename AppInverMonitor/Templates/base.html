@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AppInverMonitor{% endblock %}</title>
+
+    <!-- Colores -->
+    <link rel="stylesheet" href="{% static 'CSS/colores.css' %}">
+
+    <!-- Estilos específicos para cada página -->
+    <link rel="stylesheet" href="{% static 'CSS/home.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/register.css' %}">
+    <link rel="stylesheet" href="{% static 'Componentes/CSS/animaciones.css' %}">
+
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+</head>
+
+    {% block content %}
+
+    {% endblock %}
+
+    {% block dashboard %}
+        <script src="{% static 'CSS/dashboard.css' %}"></script>
+        <script src="{% static 'JS/dashboard.js' %}"></script>
+    {% endblock %}
+
+    {% block scripts %}
+        <script src="{% static 'JS/home.js' %}"></script>
+        <script src="{% static 'JS/register.js' %}"></script>
+        <script src="{% static 'JS/register.js' %}"></script>
+        <script src="{% static 'Componentes/JS/animaciones.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    {% endblock %}
+
+</html>

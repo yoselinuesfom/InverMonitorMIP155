@@ -1,0 +1,32 @@
+
+  /* ANIMACIONES DE ENTRADA */
+  @keyframes entrada-abajo {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animar-entrada {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .animar-entrada.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--fondo-oscuro); }
+  ::-webkit-scrollbar-thumb { background: var(--verde-oscuro); border-radius: 2px; }
+
+  @media (max-width: 900px) {
+    .panel-metricas { display: none; }
+    .estadisticas-grilla { grid-template-columns: repeat(2, 1fr); }
+    .estadistica-item { border-right: none; border-bottom: 1px solid var(--borde-sutil); }
+    .descripcion-encabezado { flex-direction: column; gap: 32px; }
+    .caracteristicas-grilla { grid-template-columns: 1fr; }
+    .alertas-contenido { grid-template-columns: 1fr; }
+    .footer-contenido { grid-template-columns: 1fr 1fr; }
+    .nav-enlaces { display: none; }
+    .cta-caja { padding: 36px 24px; }
+  }

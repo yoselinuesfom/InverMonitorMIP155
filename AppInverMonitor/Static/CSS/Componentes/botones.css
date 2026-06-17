@@ -1,0 +1,74 @@
+/*BOTONES*/
+  .btn-primario {
+    padding: 14px 32px;
+    background: var(--verde-principal);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: none;
+    text-decoration: none;
+    transition: all 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-primario:hover {
+    background: var(--verde-claro);
+    color: var(--fondo-oscuro);
+    transform: translateY(-2px);
+  }
+  .btn-secundario {
+    padding: 14px 32px;
+    background: transparent;
+    border: 1px solid var(--borde-sutil);
+    border-radius: 8px;
+    color: var(--texto-secundario);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: none;
+    text-decoration: none;
+    transition: all 0.25s;
+  }
+  .btn-secundario:hover {
+    border-color: var(--borde-activo);
+    color: var(--texto-principal);
+  }
+
+/* BOTONES DE NAVEGACIÓN (compartidos con navbar) */
+    .btn-nav-login {
+    padding: 8px 20px;
+    border: 1px solid var(--borde-activo);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--verde-claro);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: none;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-nav-login:hover {
+    background: rgba(46, 204, 113, 0.1);
+  }
+  .btn-nav-registro {
+    padding: 8px 20px;
+    border-radius: 6px;
+    background: var(--verde-principal);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: none;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+  }
+  .btn-nav-registro:hover {
+    background: var(--verde-claro);
+    color: var(--fondo-oscuro);
+  }

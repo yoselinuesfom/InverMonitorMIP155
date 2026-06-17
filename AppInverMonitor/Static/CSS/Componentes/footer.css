@@ -1,0 +1,69 @@
+
+/* FOOTER */
+  .footer {
+    position: relative;
+    z-index: 1;
+    padding: 60px 5% 32px;
+    border-top: 1px solid var(--borde-sutil);
+    background: rgba(6, 14, 9, 0.6);
+  }
+  .footer-contenido {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+  .footer-marca-nombre {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: var(--texto-principal);
+  }
+  .footer-marca-nombre span { color: var(--verde-claro); }
+  .footer-marca-desc {
+    font-size: 0.85rem;
+    color: var(--texto-tenue);
+    line-height: 1.7;
+    max-width: 280px;
+  }
+  .footer-col-titulo {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--texto-principal);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .footer-col-enlace {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--texto-tenue);
+    text-decoration: none;
+    margin-bottom: 10px;
+    transition: color 0.2s;
+  }
+  .footer-col-enlace:hover { color: var(--verde-claro); }
+  .footer-base {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 24px;
+    border-top: 1px solid var(--borde-sutil);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-copyright {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--texto-tenue);
+  }
+  .footer-estado {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--verde-claro);
+  }

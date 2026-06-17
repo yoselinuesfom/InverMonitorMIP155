@@ -1,0 +1,73 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'CSS/Componentes/sidebar.css' %}">
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-marca">
+        <i class="bi bi-layers-half"></i>
+        <span>Inver<strong>Monitor</strong></span>
+    </div>
+
+    <nav class="sidebar-nav">
+        <p class="etiqueta-grupo">Principal</p>
+        <a href="/dashboard/" class="item-nav activo" data-modulo="dashboard">
+            <i class="bi bi-grid-1x2"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="/temperatura/" class="item-nav" data-modulo="temperatura">
+            <i class="bi bi-thermometer-half"></i>
+            <span>Temperatura</span>
+        </a>
+        <a href="/humedad/" class="item-nav" data-modulo="humedad">
+            <i class="bi bi-droplet-half"></i>
+            <span>Humedad</span>
+        </a>
+        <a href="/luminosidad/" class="item-nav" data-modulo="luminosidad">
+            <i class="bi bi-brightness-high"></i>
+            <span>Luminosidad</span>
+        </a>
+
+        <p class="etiqueta-grupo">Análisis</p>
+        <a href="/estadisticas/" class="item-nav" data-modulo="estadisticas">
+            <i class="bi bi-bar-chart-line"></i>
+            <span>Estadísticas</span>
+        </a>
+        <a href="/historial/" class="item-nav" data-modulo="historial">
+            <i class="bi bi-clock-history"></i>
+            <span>Historial</span>
+        </a>
+        <a href="/alertas/" class="item-nav" data-modulo="alertas">
+            <i class="bi bi-bell"></i>
+            <span>Alertas</span>
+            <span class="insignia-nav">3</span>
+        </a>
+
+        <p class="etiqueta-grupo">Sistema</p>
+        <a href="/perfil/" class="item-nav" data-modulo="perfil">
+            <i class="bi bi-person"></i>
+            <span>Perfil</span>
+        </a>
+        <a href="/configuracion/" class="item-nav" data-modulo="configuracion">
+            <i class="bi bi-gear"></i>
+            <span>Configuración</span>
+        </a>
+        <a href="/documentacion/" class="item-nav" data-modulo="documentacion">
+            <i class="bi bi-book"></i>
+            <span>Documentación</span>
+        </a>
+        <a href="/desarrolladores/" class="item-nav" data-modulo="desarrolladores">
+            <i class="bi bi-people"></i>
+            <span>Desarrolladores</span>
+        </a>
+    </nav>
+
+    <div class="pie-sidebar">
+        <form method="POST" action="{% url 'logout' %}" style="width:100%;">
+            {% csrf_token %}
+            <button type="submit" class="boton-salir">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Cerrar sesión</span>
+            </button>
+        </form>
+    </div>
+</aside>

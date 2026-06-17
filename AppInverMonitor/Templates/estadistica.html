@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Estadísticas{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'CSS/estadistica.css' %}">
+<link rel="stylesheet" href="{% static 'CSS/dashboard.css' %}">
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-marca">
+        <img src="{% static 'IMG/logo.png' %}" alt="InverMonitor Logo" class="nav-logo-icono">
+        <span>Inver<strong>Monitor</strong></span>
+    </div>
+
+    <nav class="sidebar-nav">
+        <p class="etiqueta-grupo">Principal</p>
+        <a href="{% url 'dashboard' %}" class="item-nav">
+            <i class="bi bi-grid-1x2"></i><span>Dashboard</span>
+        </a>
+        <a href="{% url 'temperatura' %}" class="item-nav">
+            <i class="bi bi-thermometer-half"></i><span>Temperatura</span>
+        </a>
+        <a href="{% url 'humedad' %}" class="item-nav">
+            <i class="bi bi-droplet-half"></i><span>Humedad</span>
+        </a>
+        <a href="{% url 'humedadSuelo' %}" class="item-nav">
+            <i class="bi bi-moisture"></i><span>Humedad del suelo</span>
+        </a>
+        <a href="{% url 'luminosidad' %}"class="item-nav">
+            <i class="bi bi-brightness-high"></i><span>Luminosidad</span>
+        </a>
+
+        <p class="etiqueta-grupo">Análisis</p>
+        <a href="{% url 'estadistica' %}" class="item-nav activo">
+            <i class="bi bi-bar-chart-line"></i><span>Estadísticas</span>
+        </a>
+        <a href="{% url 'historial' %}" class="item-nav">
+            <i class="bi bi-clock-history"></i><span>Historial</span>
+        </a>
+        <a href="{% url 'notificaciones' %}" class="item-nav">
+            <i class="bi bi-bell"></i><span>Alertas</span>
+        </a>
+
+        <p class="etiqueta-grupo">Sistema</p>
+        <a href="{% url 'perfil' %}" class="item-nav">
+            <i class="bi bi-person"></i><span>Perfil</span>
+        </a>
+        <a href="{% url 'configuracion' %}" class="item-nav">
+            <i class="bi bi-gear"></i><span>Configuración</span>
+        </a>
+        <a href="{% url 'documentacion' %}" class="item-nav">
+            <i class="bi bi-book"></i><span>Documentación</span>
+        </a>
+        <a href="{% url 'desarrolladores' %}" class="item-nav">
+            <i class="bi bi-people"></i><span>Desarrolladores</span>
+        </a>
+    </nav>
+
+    <div class="pie-sidebar">
+        <form method="POST" action="{% url 'logout' %}" style="width:100%;">
+            {% csrf_token %}
+            <button type="submit" class="boton-salir">
+                <i class="bi bi-box-arrow-left"></i><span>Cerrar sesión</span>
+            </button>
+        </form>
+    </div>
+</aside>
+
+<main class="main" id="main">
+
+    <header class="topbar">
+        <div class="topbar-izquierda">
+            <button class="boton-sidebar" id="sidebarToggle" aria-label="Toggle sidebar">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="topbar-titulo">
+                <h1 class="titulo-pagina">Estadísticas</h1>
+                <p class="subtitulo-pagina" id="currentDate"></p>
+            </div>
+        </div>
+        <div class="topbar-derecha">
+            <button class="boton-tema" id="botonTema" title="Cambiar tema"><i class="bi bi-brightness-high-fill"></i></button>
+            <div class="reloj-topbar" id="clockDisplay">00:00:00</div>
+            <div class="usuario-topbar">
+                <div class="info-usuario">
+                    <span class="nombre-usuario">{{ user.get_full_name|default:user.username }}</span>
+                    <span class="rol-usuario"></span>
+                </div>
+                <div class="avatar-usuario">
+                    {% if user.profile.photo %}
+                        <img src="{{ user.profile.photo.url }}" alt="Foto de perfil">
+                    {% else %}
+                        <i class="bi bi-person-fill"></i>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="contenido">
+
+        <!-- SECCION 1 -->
+        <section class="seccion">
+            <div class="cabecera-seccion">
+                <p class="etiqueta-seccion">Resumen</p>
+                <h2 class="titulo-seccion">Resumen histórico</h2>
+            </div>
+
+            <div class="grilla-kpi">
+
+                <div class="tarjeta-kpi">
+                    <div class="kpi-icono fondo-rojo"><i class="bi bi-thermometer-high"></i></div>
+                    <div class="kpi-cuerpo">
+                        <p class="kpi-etiqueta">Temp. máxima histórica</p>
+                        <p class="kpi-valor">{{ kpi.temp_max }}<span class="kpi-unidad">°C</span></p>
+                        <p class="kpi-meta">{{ kpi.temp_max_fecha }}</p>
+                    </div>
+                </div>
+
+                <div class="tarjeta-kpi">
+                    <div class="kpi-icono fondo-azul"><i class="bi bi-thermometer-snow"></i></div>
+                    <div class="kpi-cuerpo">
+                        <p class="kpi-etiqueta">Temp. mínima histórica</p>
+                        <p class="kpi-valor">{{ kpi.temp_min }}<span class="kpi-unidad">°C</span></p>
+                        <p class="kpi-meta">{{ kpi.temp_min_fecha }}</p>
+                    </div>
+                </div>
+
+                <div class="tarjeta-kpi">
+                    <div class="kpi-icono fondo-azul"><i class="bi bi-droplet-half"></i></div>
+                    <div class="kpi-cuerpo">
+                        <p class="kpi-etiqueta">Humedad promedio</p>
+                        <p class="kpi-valor">{{ kpi.hum_promedio }}<span class="kpi-unidad">%</span></p>
+                        <p class="kpi-meta">Últimos {{ kpi.periodo_dias }} días</p>
+                    </div>
+                </div>
+
+                <div class="tarjeta-kpi">
+                    <div class="kpi-icono fondo-ambar"><i class="bi bi-brightness-high"></i></div>
+                    <div class="kpi-cuerpo">
+                        <p class="kpi-etiqueta">Luminosidad promedio</p>
+                        <p class="kpi-valor">{{ kpi.lux_promedio }}<span class="kpi-unidad">lux</span></p>
+                        <p class="kpi-meta">Últimos {{ kpi.periodo_dias }} días</p>
+                    </div>
+                </div>
+
+                <div class="tarjeta-kpi">
+                    <div class="kpi-icono fondo-purpura"><i class="bi bi-database-check"></i></div>
+                    <div class="kpi-cuerpo">
+                        <p class="kpi-etiqueta">Total de lecturas</p>
+                        <p class="kpi-valor">{{ kpi.total_lecturas }}</p>
+                        <p class="kpi-meta">Desde {{ kpi.fecha_inicio }}</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- SECCIÓN 2 — GRAFICAS-->
+        <section class="seccion">
+            <div class="cabecera-seccion">
+                <p class="etiqueta-seccion">Comparativa</p>
+                <h2 class="titulo-seccion">Promedios por día</h2>
+            </div>
+
+            <div class="tarjeta-grafica-wrap">
+                <div class="grafica-cabecera">
+                    <div class="grafica-titulo">
+                        <i class="bi bi-bar-chart-line icono-verde"></i>
+                        Temperatura · Humedad · Luminosidad
+                    </div>
+                    <div class="selector-rango">
+                        <a href="?rango=7d"  class="rango-btn {% if rango_activo == '7d'  %}rango-activo{% endif %}">7 días</a>
+                        <a href="?rango=30d" class="rango-btn {% if rango_activo == '30d' %}rango-activo{% endif %}">30 días</a>
+                        <a href="?rango=90d" class="rango-btn {% if rango_activo == '90d' %}rango-activo{% endif %}">90 días</a>
+                    </div>
+                </div>
+
+                <div class="grafica-cuerpo">
+                    {% if grafica_comparativa %}
+                        <img src="data:image/png;base64,{{ grafica_comparativa }}"
+                             alt="Gráfica comparativa de temperatura, humedad y luminosidad"
+                             style="width:100%; height:auto; border-radius:8px;">
+                    {% else %}
+                        <div class="grafica-vacia">
+                            <i class="bi bi-bar-chart-line"></i>
+                            <p>Sin datos para el rango seleccionado.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SECCIÓN 3 — CONTEO DE ALERTAS  -->
+        <section class="seccion">
+            <div class="cabecera-seccion">
+                <p class="etiqueta-seccion">Riesgo</p>
+                <h2 class="titulo-seccion">Alertas disparadas</h2>
+            </div>
+
+            <div class="dos-columnas">
+
+                <!-- Conteo por tipo -->
+                <div class="tarjeta-tabla">
+                    <table class="tabla-datos">
+                        <thead>
+                            <tr>
+                                <th>Tipo de alerta</th>
+                                <th>% del total</th>
+                                <th>Nivel de riesgo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for a in alertas_resumen %}
+                            <tr>
+                                <td>
+                                    <span class="etiqueta etiqueta-{{ a.color }}">
+                                        <i class="bi {{ a.icono }}"></i> {{ a.nombre }}
+                                    </span>
+                                </td>
+                                <td class="celda-mono">{{ a.porcentaje }}%</td>
+                                <td>
+                                    <span class="prioridad prioridad-{{ a.riesgo_clase }}">{{ a.riesgo_label }}</span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="celda-vacia">Sin alertas registradas en este periodo.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </section>
+
+    </div><!-- /contenido -->
+</main>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'JS/dashboard.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Desarrolladores{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'CSS/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'CSS/desarrolladores.css' %}">
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-marca">
+      <img src="{% static 'IMG/logo.png' %}" alt="InverMonitor Logo" class="nav-logo-icono">
+      <span>Inver<strong>Monitor</strong></span>
+    </div>
+
+    <nav class="sidebar-nav">
+        <p class="etiqueta-grupo">Principal</p>
+        <a href="{% url 'dashboard' %}" class="item-nav">
+            <i class="bi bi-grid-1x2"></i><span>Dashboard</span>
+        </a>
+        <a href="{% url 'temperatura' %}" class="item-nav">
+            <i class="bi bi-thermometer-half"></i><span>Temperatura</span>
+        </a>
+        <a href="{% url 'humedad' %}" class="item-nav">
+            <i class="bi bi-droplet-half"></i><span>Humedad</span>
+        </a>
+        <a href="{% url 'humedadSuelo' %}" class="item-nav">
+            <i class="bi bi-moisture"></i><span>Humedad del suelo</span>
+        </a>
+        <a href="{% url 'luminosidad' %}"class="item-nav">
+            <i class="bi bi-brightness-high"></i><span>Luminosidad</span>
+        </a>
+
+        <p class="etiqueta-grupo">Análisis</p>
+        <a href="{% url 'estadistica' %}" class="item-nav">
+            <i class="bi bi-bar-chart-line"></i><span>Estadísticas</span>
+        </a>
+        <a href="{% url 'historial' %}" class="item-nav">
+            <i class="bi bi-clock-history"></i><span>Historial</span>
+        </a>
+        <a href="{% url 'notificaciones' %}" class="item-nav">
+            <i class="bi bi-bell"></i><span>Alertas</span>
+        </a>
+
+        <p class="etiqueta-grupo">Sistema</p>
+        <a href="{% url 'perfil' %}" class="item-nav">
+            <i class="bi bi-person"></i><span>Perfil</span>
+        </a>
+        <a href="{% url 'configuracion' %}"  class="item-nav">
+            <i class="bi bi-gear"></i><span>Configuración</span>
+        </a>
+        <a href="{% url 'documentacion' %}" class="item-nav">
+            <i class="bi bi-book"></i><span>Documentación</span>
+        </a>
+        <a href="{% url 'desarrolladores' %}" class="item-nav activo">
+            <i class="bi bi-people"></i><span>Desarrolladores</span>
+        </a>
+    </nav>
+
+    <div class="pie-sidebar">
+        <form method="POST" action="{% url 'logout' %}" style="width:100%;">
+            {% csrf_token %}
+            <button type="submit" class="boton-salir">
+                <i class="bi bi-box-arrow-left"></i><span>Cerrar sesión</span>
+            </button>
+        </form>
+    </div>
+</aside>
+
+<main class="main" id="main">
+
+    <header class="topbar">
+        <div class="topbar-izquierda">
+            <button class="boton-sidebar" id="sidebarToggle" aria-label="Toggle sidebar">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="topbar-titulo">
+                <h1 class="titulo-pagina">Desarroladores</h1>
+            </div>
+        </div>
+        <div class="topbar-derecha">
+            <button class="boton-tema" id="botonTema" title="Cambiar tema"><i class="bi bi-brightness-high-fill"></i></button>
+            <div class="reloj-topbar" id="clockDisplay">00:00:00</div>
+            <div class="usuario-topbar">
+                <div class="info-usuario">
+                    <span class="nombre-usuario">{{ user.get_full_name|default:user.username }}</span>
+                    <span class="rol-usuario"></span>
+                </div>
+                <div class="avatar-usuario">
+                    {% if user.profile.photo %}
+                        <img src="{{ user.profile.photo.url }}" alt="Foto de perfil">
+                    {% else %}
+                        <i class="bi bi-person-fill"></i>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+   <div class="contenido">
+      <div class="dev-pagina">
+        <!-- Encabezado -->
+        <div class="dev-encabezado">
+          <span class="dev-etiqueta">
+            <i class="bi bi-code-slash"></i>
+          </span>
+          <h2 class="dev-titulo">Equipo de <span>Desarrollo</span></h2>
+          <p class="dev-subtitulo">
+            InverMonitor fue desarrollado como proyecto académico para el monitoreo
+            ambiental inteligente de invernaderos mediante tecnología IoT.
+          </p>
+        </div>
+
+        <!-- Tarjetas del equipo -->
+        <div class="dev-grilla">
+
+          <!-- Estudiante 1 -->
+          <div class="dev-tarjeta">
+            <div class="dev-avatar">
+              <i class="bi bi-person-fill"></i>
+            </div>
+            <div class="dev-info">
+              <span class="dev-rol-chip dev-rol-chip--estudiante">
+                <i class="bi bi-mortarboard"></i> Estudiante
+              </span>
+              <h3 class="dev-nombre">Yoselin Joya</h3>
+              <p class="dev-carrera">Ingeniería en Sistemas</p>
+              <div class="dev-contacto">
+                <span class="dev-contacto-item">
+                  <i class="bi bi-envelope"></i>
+                  jo21003@ues.edu.sv
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Estudiante 2 -->
+          <div class="dev-tarjeta">
+            <div class="dev-avatar">
+              <i class="bi bi-person-fill"></i>
+            </div>
+            <div class="dev-info">
+              <span class="dev-rol-chip dev-rol-chip--estudiante">
+                <i class="bi bi-mortarboard"></i> Estudiante
+              </span>
+              <h3 class="dev-nombre">Abraham Umanzor</h3>
+              <p class="dev-carrera">Ingeniería en Sistemas</p>
+              <div class="dev-contacto">
+                <span class="dev-contacto-item">
+                  <i class="bi bi-envelope"></i>
+                 jo21003@ues.edu.sv
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Docente -->
+          <div class="dev-tarjeta dev-tarjeta--docente">
+            <div class="dev-avatar dev-avatar--docente">
+              <i class="bi bi-person-workspace"></i>
+            </div>
+            <div class="dev-info">
+              <span class="dev-rol-chip dev-rol-chip--docente">
+                <i class="bi bi-award"></i> Docente encargada
+              </span>
+              <h3 class="dev-nombre">Ing. Teresa Jimenez</h3>
+              <p class="dev-carrera"></p>
+              <div class="dev-contacto">
+                <span class="dev-contacto-item">
+                  <i class="bi bi-envelope"></i>
+                  maria.jimenez@ues.edu.sv
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Info del proyecto -->
+        <div class="dev-proyecto">
+
+          <div class="dev-proyecto-item">
+            <div class="dev-proyecto-icono">
+              <i class="bi bi-calendar3"></i>
+            </div>
+            <div>
+              <span class="dev-proyecto-label">Año</span>
+              <span class="dev-proyecto-valor">2026</span>
+            </div>
+          </div>
+
+          <div class="dev-proyecto-item">
+            <div class="dev-proyecto-icono">
+              <i class="bi bi-building"></i>
+            </div>
+            <div>
+              <span class="dev-proyecto-label">Institución</span>
+              <span class="dev-proyecto-valor">UES - FMO </span>
+            </div>
+          </div>
+
+          
+          <div class="dev-proyecto-item">
+            <div class="dev-proyecto-icono">
+              <i class="bi bi-building"></i>
+            </div>
+            <div>
+              <span class="dev-proyecto-label">Asignatura </span>
+              <span class="dev-proyecto-valor">Microprgramacion </span>
+            </div>
+          </div>
+
+          <div class="dev-proyecto-item">
+            <div class="dev-proyecto-icono">
+              <i class="bi bi-stack"></i>
+            </div>
+            <div>
+              <span class="dev-proyecto-label">Tecnologías</span>
+              <span class="dev-proyecto-valor">Django · Python · IoT</span>
+            </div>
+          </div>
+
+          <div class="dev-proyecto-item">
+            <div class="dev-proyecto-icono">
+              <i class="bi bi-tag"></i>
+            </div>
+            <div>
+              <span class="dev-proyecto-label">Versión</span>
+              <span class="dev-proyecto-valor">1.0.0</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}<script src="{% static 'JS/dashboard.js' %}"></script>{% endblock %}

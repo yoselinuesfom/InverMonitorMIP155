@@ -1,0 +1,215 @@
+
+/* ── LAYOUT ─────────────────────────────────────────────────── */
+.dev-pagina {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 900px;
+}
+
+/* ── ENCABEZADO ─────────────────────────────────────────────── */
+.dev-encabezado {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dev-etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--fuente-mono);
+  font-size: 0.7rem;
+  color: var(--texto-tenue);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.dev-etiqueta i { color: var(--verde-claro); }
+
+.dev-titulo {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--texto-principal);
+}
+.dev-titulo span { color: var(--verde-claro); }
+
+.dev-subtitulo {
+  font-size: 0.9rem;
+  color: var(--texto-tenue);
+  line-height: 1.7;
+  max-width: 560px;
+}
+
+/* ── GRILLA TARJETAS ────────────────────────────────────────── */
+.dev-grilla {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* ── TARJETA ────────────────────────────────────────────────── */
+.dev-tarjeta {
+  background: var(--fondo-tarjeta);
+  border: 1px solid var(--borde-sutil);
+  border-radius: 14px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+.dev-tarjeta:hover {
+  border-color: var(--borde-activo);
+  transform: translateY(-3px);
+}
+
+/* Tarjeta docente con acento diferente */
+.dev-tarjeta--docente {
+  border-color: rgba(240, 165, 0, 0.2);
+}
+.dev-tarjeta--docente:hover {
+  border-color: rgba(240, 165, 0, 0.5);
+}
+
+/* ── AVATAR ─────────────────────────────────────────────────── */
+.dev-avatar {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: rgba(46, 204, 113, 0.08);
+  border: 1px solid var(--borde-activo);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: var(--verde-claro);
+}
+
+.dev-avatar--docente {
+  background: rgba(240, 165, 0, 0.08);
+  border-color: rgba(240, 165, 0, 0.4);
+  color: var(--acento-ambar);
+}
+
+/* ── INFO ───────────────────────────────────────────────────── */
+.dev-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.dev-rol-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--fuente-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 100px;
+  letter-spacing: 0.5px;
+}
+.dev-rol-chip--estudiante {
+  background: rgba(46, 204, 113, 0.10);
+  color: var(--verde-claro);
+  border: 1px solid rgba(46, 204, 113, 0.25);
+}
+.dev-rol-chip--docente {
+  background: rgba(240, 165, 0, 0.10);
+  color: var(--acento-ambar);
+  border: 1px solid rgba(240, 165, 0, 0.25);
+}
+
+.dev-nombre {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--texto-principal);
+  margin: 0;
+}
+
+.dev-carrera {
+  font-size: 0.78rem;
+  color: var(--texto-tenue);
+  margin: 0;
+}
+
+/* ── CONTACTO ───────────────────────────────────────────────── */
+.dev-contacto {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  padding-top: 12px;
+  border-top: 1px solid var(--borde-sutil);
+}
+
+.dev-contacto-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-family: var(--fuente-mono);
+  font-size: 0.72rem;
+  color: var(--texto-tenue);
+}
+.dev-contacto-item i { color: var(--verde-claro); font-size: 0.8rem; }
+
+/* ── INFO PROYECTO ──────────────────────────────────────────── */
+.dev-proyecto {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: var(--fondo-tarjeta);
+  border: 1px solid var(--borde-sutil);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.dev-proyecto-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px;
+  border-right: 1px solid var(--borde-sutil);
+}
+.dev-proyecto-item:last-child { border-right: none; }
+
+.dev-proyecto-icono {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  background: rgba(46, 204, 113, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--verde-claro);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.dev-proyecto-label {
+  display: block;
+  font-family: var(--fuente-mono);
+  font-size: 0.65rem;
+  color: var(--texto-tenue);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.dev-proyecto-valor {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--texto-principal);
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 800px) {
+  .dev-grilla   { grid-template-columns: 1fr; }
+  .dev-proyecto { grid-template-columns: repeat(2, 1fr); }
+  .dev-proyecto-item { border-right: none; border-bottom: 1px solid var(--borde-sutil); }
+  .dev-proyecto-item:last-child { border-bottom: none; }
+}

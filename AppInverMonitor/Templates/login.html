@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Iniciar sesión{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'CSS/register.css' %}">
+
+<!-- Fondo -->
+<div class="fondo-cuadricula"></div>
+<div class="fondo-brillo" id="brilloFondo"></div>
+
+{% include 'Componentes/navbar.html' %}
+
+<!-- WRAPPER PRINCIPAL -->
+<div class="register-wrapper">
+  <div class="register-container">
+
+    <!-- ── PANEL IZQUIERDO ── -->
+    <div class="register-panel-izq">
+      <a href="{% url 'home' %}" class="panel-logo">
+        <div class="panel-logo-icono"></div>
+        <span class="panel-logo-texto">Inver<span>Monitor</span></span>
+      </a>
+
+      <div>
+        <h2 class="panel-titulo">
+          Bienvenido<br>
+          de <span>vuelta.</span>
+        </h2>
+        <p class="panel-descripcion">
+          Inicia sesión y accede a tu panel de monitoreo en tiempo real. Tus cultivos te están esperando.
+        </p>
+
+        <div class="panel-beneficios">
+          <div class="beneficio-item">
+            <span class="beneficio-check">✓</span>
+            Alertas automáticas configurables
+          </div>
+          <div class="beneficio-item">
+            <span class="beneficio-check">✓</span>
+            Historial y reportes en PDF
+          </div>
+          <div class="beneficio-item">
+            <span class="beneficio-check">✓</span>
+            Conexión con sensores IoT
+          </div>
+          <div class="beneficio-item">
+            <span class="beneficio-check">✓</span>
+            Disponibilidad 99.9% garantizada
+          </div>
+        </div>
+      </div>
+
+      <span class="panel-footer-texto"></span>
+    </div>
+
+    <!-- ── PANEL DERECHO (formulario) ── -->
+    <div class="register-panel-der">
+
+      {% if form.non_field_errors %}
+        <div class="form-mensajes">
+          {% for error in form.non_field_errors %}
+            <div class="mensaje-item mensaje-error">{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="form-encabezado">
+        <span class="form-etiqueta">// ACCESO</span>
+        <h1 class="form-titulo">Iniciar sesión</h1>
+      </div>
+
+      <!-- Divider -->
+      <div class="form-divider">
+        <div class="form-divider-linea"></div>
+        <span class="form-divider-texto">CON TU CORREO</span>
+        <div class="form-divider-linea"></div>
+      </div>
+
+      <form method="POST" action="{% url 'login' %}" novalidate class="register-form">
+        {% csrf_token %}
+
+        {% if request.GET.next %}
+          <input type="hidden" name="next" value="{{ request.GET.next }}">
+        {% endif %}
+
+        <!-- Correo -->
+        <div class="campo-grupo">
+          <label class="campo-label" for="correo">Correo electrónico</label>
+          <div class="campo-input-wrapper">
+            <span class="campo-icono">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+              </svg>
+            </span>
+            <input
+              class="campo-input {% if form.email.errors %}error{% endif %}"
+              type="email"
+              id="correo"
+              name="email"
+              placeholder="correo@ejemplo.com"
+              autocomplete="email"
+              value="{{ form.email.value|default:'' }}"
+            >
+          </div>
+          {% if form.email.errors %}
+            <div class="campo-error-msg visible">{{ form.email.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Contraseña -->
+        <div class="campo-grupo">
+          <label class="campo-label" for="password">Contraseña</label>
+          <div class="campo-input-wrapper">
+            <span class="campo-icono">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4M4.5 7A1.5 1.5 0 0 0 3 8.5v5A1.5 1.5 0 0 0 4.5 15h7a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 11.5 7zM8 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3"/>
+              </svg>
+            </span>
+            <input
+              class="campo-input {% if form.password.errors %}error{% endif %}"
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Tu contraseña"
+              autocomplete="current-password"
+            >
+            <button type="button" class="btn-toggle-pass">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+              </svg>
+            </button>
+          </div>
+          {% if form.password.errors %}
+            <div class="campo-error-msg visible">{{ form.password.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Recordar + olvidé -->
+        <div class="form-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px;">
+          <label class="campo-checkbox">
+            <input type="checkbox" name="remember_me">
+            <span class="campo-checkbox-label">Recordarme</span>
+          </label>
+          <a href="{% url 'password_reset' %}" class="forgot-link" style="font-size:0.85rem; color: var(--verde-claro);">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn-register">
+          Ingresar
+        </button>
+
+        <!-- Link register -->
+        <div class="form-footer">
+          ¿No tienes cuenta? <a href="{% url 'register' %}">Crear cuenta →</a>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script>
+  setTimeout(() => {
+    document.querySelectorAll('.alertas-flotantes .alert').forEach(alert => {
+      alert.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      alert.style.opacity = '0';
+      alert.style.transform = 'translateY(-10px)';
+      setTimeout(() => alert.remove(), 500);
+    });
+  }, 4000);
+</script>
+{% endblock %}

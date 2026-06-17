@@ -1,0 +1,437 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Humedad{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'CSS/humedad.css' %}">
+<link rel="stylesheet" href="{% static 'CSS/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'CSS/temperatura.css' %}">
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-marca">
+        <img src="{% static 'IMG/logo.png' %}" alt="InverMonitor Logo" class="nav-logo-icono">
+        <span>Inver<strong>Monitor</strong></span>
+    </div>
+   
+    <nav class="sidebar-nav">
+        <p class="etiqueta-grupo">Principal</p>
+        <a href="#" class="item-nav">
+            <i class="bi bi-grid-1x2"></i><span>Dashboard</span>
+        </a>
+        <a href="{% url 'temperatura' %}" class="item-nav">
+            <i class="bi bi-thermometer-half"></i><span>Temperatura</span>
+        </a>
+        <a href="{% url 'humedad' %}" class="item-nav activo">
+            <i class="bi bi-droplet-half"></i><span>Humedad</span>
+        </a>
+        <a href="{% url 'humedadSuelo' %}" class="item-nav">
+            <i class="bi bi-moisture"></i><span>Humedad del suelo</span>
+        </a>
+        <a href="{% url 'luminosidad' %}" class="item-nav">
+            <i class="bi bi-brightness-high"></i><span>Luminosidad</span>
+        </a>
+        
+
+        <p class="etiqueta-grupo">Análisis</p>
+        <a href="{% url 'estadistica' %}" class="item-nav">
+            <i class="bi bi-bar-chart-line"></i><span>Estadísticas</span>
+        </a>
+        <a href="{% url 'historial' %}" class="item-nav">
+            <i class="bi bi-clock-history"></i><span>Historial</span>
+        </a>
+        <a href="{% url 'notificaciones'%}" class="item-nav">
+            <i class="bi bi-bell"></i><span>Alertas</span>
+        </a>
+
+        <p class="etiqueta-grupo">Sistema</p>
+        <a href="{% url 'perfil' %}" class="item-nav">
+            <i class="bi bi-person"></i><span>Perfil</span>
+        </a>
+        <a href="{% url 'configuracion' %}" class="item-nav">
+            <i class="bi bi-gear"></i><span>Configuración</span>
+        </a>
+        <a href="{% url 'documentacion' %}" class="item-nav">
+            <i class="bi bi-book"></i><span>Documentación</span>
+        </a>
+        <a href="{% url 'desarrolladores'%}" class="item-nav">
+            <i class="bi bi-people"></i><span>Desarrolladores</span>
+        </a>
+    </nav>
+    <div class="pie-sidebar">
+        <form method="POST" action="{% url 'logout' %}" style="width:100%;">
+            {% csrf_token %}
+            <button type="submit" class="boton-salir">
+                <i class="bi bi-box-arrow-left"></i><span>Cerrar sesión</span>
+            </button>
+        </form>
+    </div>
+</aside>
+
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     MAIN
+════════════════════════════════════════════════════════════ -->
+<main class="main" id="main">
+
+    <!-- TOPBAR (idéntico al dashboard) -->
+    <header class="topbar">
+        <div class="topbar-izquierda">
+            <button class="boton-sidebar" id="sidebarToggle" aria-label="Toggle sidebar">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="topbar-titulo">
+                <h1 class="titulo-pagina">Humedad</h1>
+                <p class="subtitulo-pagina" id="currentDate"></p>
+            </div>
+        </div>
+        <div class="topbar-derecha">
+            <button class="boton-tema" id="botonTema" title="Cambiar tema"><i class="bi bi-brightness-high-fill"></i></button>
+            <div class="reloj-topbar" id="clockDisplay">00:00:00</div>
+            <div class="usuario-topbar">
+                <div class="info-usuario">
+                    <span class="nombre-usuario">{{ user.get_full_name|default:user.username }}</span>
+                    <span class="rol-usuario"></span>
+                </div>
+                <div class="avatar-usuario">
+                    {% if user.profile.photo %}
+                        <img src="{{ user.profile.photo.url }}" alt="Foto de perfil">
+                    {% else %}
+                        <i class="bi bi-person-fill"></i>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="contenido">
+
+        <!-- ═══════════════════════════════════════════════════
+             SECCIÓN 1 — Estado actual (tiempo real)
+        ════════════════════════════════════════════════════ -->
+        <section class="seccion">
+            <div class="cabecera-seccion">
+                <p class="etiqueta-seccion">Tiempo real</p>
+                <h2 class="titulo-seccion">Estado actual</h2>
+            </div>
+
+            <div class="grilla-estado-actual">
+
+                <!-- Valor principal -->
+                <div class="tarjeta-valor-principal">
+                    <div class="valor-principal-icono">
+                        <i class="bi bi-droplet-half"></i>
+                    </div>
+                    <div class="valor-principal-cuerpo">
+                        <p class="valor-principal-numero" id="humActual">
+                            {% if hum_actual %}{{ hum_actual }}{% else %}—{% endif %}
+                            <span class="valor-principal-unidad">%</span>
+                        </p>
+                        <p class="valor-principal-etiqueta">Humedad del suelo actual</p>
+                    </div>
+                </div>
+
+                <!-- Estado Normal / Alta / Baja -->
+                <div class="tarjeta-estado-badge-wrap">
+                    <p class="tarjeta-mini-titulo">Estado</p>
+                    <div class="estado-actual-badge
+                        {% if estado_actual == 'Alta' %}estado-badge-alta
+                        {% elif estado_actual == 'Baja' %}estado-badge-baja
+                        {% else %}estado-badge-normal{% endif %}"
+                        id="estadoActual">
+                        {% if estado_actual == 'Alta' %}
+                            <i class="bi bi-droplet-fill"></i> Alta
+                        {% elif estado_actual == 'Baja' %}
+                            <i class="bi bi-droplet"></i> Baja
+                        {% else %}
+                            <i class="bi bi-check-circle"></i> Normal
+                        {% endif %}
+                    </div>
+                    <p class="tarjeta-mini-desc">
+                        Umbral: <strong>{{ umbral_min }}% – {{ umbral_max }}%</strong>
+                    </p>
+                </div>
+
+                <!-- Fecha / hora última lectura -->
+                <div class="tarjeta-ultima-lectura">
+                    <p class="tarjeta-mini-titulo">Última lectura</p>
+                    <p class="ultima-lectura-valor" id="fechaLectura">
+                        <i class="bi bi-clock"></i>
+                        {% if fecha_lectura %}{{ fecha_lectura }}{% else %}—{% endif %}
+                    </p>
+                    <p class="tarjeta-mini-desc">Actualización automática cada 30 s</p>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════════════════════════════════════
+             SECCIÓN 2 — Gráfica en tiempo real
+        ════════════════════════════════════════════════════ -->
+        <section class="seccion">
+            <div class="cabecera-seccion">
+                <p class="etiqueta-seccion">Evolución</p>
+                <h2 class="titulo-seccion">Gráfica en tiempo real</h2>
+            </div>
+
+            <div class="tarjeta-grafica-wrap">
+                <!-- Cabecera: título + selector de rango -->
+                <div class="grafica-cabecera">
+                    <div class="grafica-titulo">
+                        <i class="bi bi-droplet-half icono-azul"></i>
+                        Humedad del suelo — últimos registros
+                    </div>
+                    <div class="selector-rango">
+                        <a href="?rango=1h"  class="rango-btn {% if rango_activo == '1h'  %}rango-activo{% endif %}">Última hora</a>
+                        <a href="?rango=24h" class="rango-btn {% if rango_activo == '24h' %}rango-activo{% endif %}">Últimas 24 h</a>
+                        <a href="?rango=7d"  class="rango-btn {% if rango_activo == '7d'  %}rango-activo{% endif %}">Últimos 7 días</a>
+                        <a href="?rango=30d" class="rango-btn {% if rango_activo == '30d' %}rango-activo{% endif %}">Último mes</a>
+                    </div>
+                </div>
+
+                <!-- Gráfico -->
+                <div class="grafica-cuerpo">
+                    {% if grafica_img %}
+                        <img src="data:image/png;base64,{{ grafica_img }}"
+                            alt="Gráfica de humedad del suelo"
+                            style="width:100%; height:auto; border-radius:8px;">
+                    {% else %}
+                        <div class="grafica-vacia">
+                            <i class="bi bi-bar-chart-line"></i>
+                            <p>Sin datos para el rango seleccionado.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════════════════════════════════════
+             SECCIÓN 3 — Estadísticas
+        ════════════════════════════════════════════════════ -->
+        <section class="seccion">
+            <div class="cabecera-seccion">
+                <p class="etiqueta-seccion">Resumen</p>
+                <h2 class="titulo-seccion">Estadísticas de humedad</h2>
+            </div>
+
+            <div class="grilla-estadisticas">
+
+                <div class="tarjeta-estadistica">
+                    <div class="estadistica-icono icono-azul">
+                        <i class="bi bi-droplet-fill"></i>
+                    </div>
+                    <div class="estadistica-cuerpo">
+                        <p class="estadistica-etiqueta">Máxima registrada</p>
+                        <p class="estadistica-valor">
+                            {{ stat_max }}<span class="estadistica-unidad">%</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="tarjeta-estadistica">
+                    <div class="estadistica-icono icono-azul">
+                        <i class="bi bi-droplet"></i>
+                    </div>
+                    <div class="estadistica-cuerpo">
+                        <p class="estadistica-etiqueta">Mínima registrada</p>
+                        <p class="estadistica-valor">
+                            {{ stat_min }}<span class="estadistica-unidad">%</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="tarjeta-estadistica">
+                    <div class="estadistica-icono icono-purpura">
+                        <i class="bi bi-calculator"></i>
+                    </div>
+                    <div class="estadistica-cuerpo">
+                        <p class="estadistica-etiqueta">Promedio general</p>
+                        <p class="estadistica-valor">
+                            {{ stat_promedio }}<span class="estadistica-unidad">%</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="tarjeta-estadistica">
+                    <div class="estadistica-icono icono-verde">
+                        <i class="bi bi-activity"></i>
+                    </div>
+                    <div class="estadistica-cuerpo">
+                        <p class="estadistica-etiqueta">Total de lecturas</p>
+                        <p class="estadistica-valor">{{ stat_lecturas }}</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════════════════════════════════════
+             SECCIÓN 4 — Indicadores de tendencia
+        ════════════════════════════════════════════════════ -->
+        <section class="seccion">
+            <div class="cabecera-seccion">
+                <p class="etiqueta-seccion">Dinámica</p>
+                <h2 class="titulo-seccion">Indicadores de tendencia</h2>
+            </div>
+
+            <div class="grilla-tendencia">
+
+                <!-- Tarjeta principal de tendencia -->
+                <div class="tarjeta-tendencia-principal">
+                    <p class="tarjeta-mini-titulo">Tendencia actual</p>
+
+                    <div class="tendencia-icono-wrap
+                        {% if tendencia == 'subiendo' %}tend-color-sube
+                        {% elif tendencia == 'bajando' %}tend-color-baja
+                        {% else %}tend-color-estable{% endif %}"
+                        id="tendenciaIcono">
+                        {% if tendencia == 'subiendo' %}
+                            <i class="bi bi-graph-up-arrow"></i>
+                        {% elif tendencia == 'bajando' %}
+                            <i class="bi bi-graph-down-arrow"></i>
+                        {% else %}
+                            <i class="bi bi-arrow-right"></i>
+                        {% endif %}
+                    </div>
+
+                    <p class="tendencia-label
+                        {% if tendencia == 'subiendo' %}tend-color-sube
+                        {% elif tendencia == 'bajando' %}tend-color-baja
+                        {% else %}tend-color-estable{% endif %}"
+                        id="tendenciaLabel">
+                        {% if tendencia == 'subiendo' %}Subiendo rápido
+                        {% elif tendencia == 'bajando' %}Bajando rápido
+                        {% else %}Estable{% endif %}
+                    </p>
+
+                    <p class="tendencia-desc" id="tendenciaDesc">
+                        {% if tendencia == 'subiendo' %}
+                            La humedad del suelo aumentó más de 1% respecto al registro anterior.
+                        {% elif tendencia == 'bajando' %}
+                            La humedad del suelo disminuyó más de 1% respecto al registro anterior.
+                        {% else %}
+                            La humedad del suelo se mantiene dentro del mismo rango.
+                        {% endif %}
+                    </p>
+                </div>
+
+                <!-- Los 3 estados posibles como referencia visual -->
+                <div class="tarjeta-referencia-tendencias">
+                    <p class="tarjeta-mini-titulo">Estados posibles</p>
+                    <div class="referencia-lista">
+
+                        <div class="referencia-item {% if tendencia == 'subiendo' %}referencia-activa{% endif %}">
+                            <div class="referencia-icono tend-color-sube">
+                                <i class="bi bi-graph-up-arrow"></i>
+                            </div>
+                            <div class="referencia-texto">
+                                <p class="referencia-nombre">Subiendo rápido</p>
+                                <p class="referencia-condicion">Aumento &gt; 1% vs lectura anterior</p>
+                            </div>
+                            {% if tendencia == 'subiendo' %}
+                                <span class="referencia-activa-dot"></span>
+                            {% endif %}
+                        </div>
+
+                        <div class="referencia-item {% if tendencia == 'bajando' %}referencia-activa{% endif %}">
+                            <div class="referencia-icono tend-color-baja">
+                                <i class="bi bi-graph-down-arrow"></i>
+                            </div>
+                            <div class="referencia-texto">
+                                <p class="referencia-nombre">Bajando rápido</p>
+                                <p class="referencia-condicion">Caída &gt; 1% vs lectura anterior</p>
+                            </div>
+                            {% if tendencia == 'bajando' %}
+                                <span class="referencia-activa-dot"></span>
+                            {% endif %}
+                        </div>
+
+                        <div class="referencia-item {% if tendencia == 'estable' %}referencia-activa{% endif %}">
+                            <div class="referencia-icono tend-color-estable">
+                                <i class="bi bi-arrow-right"></i>
+                            </div>
+                            <div class="referencia-texto">
+                                <p class="referencia-nombre">Estable</p>
+                                <p class="referencia-condicion">Variación ≤ 1% vs lectura anterior</p>
+                            </div>
+                            {% if tendencia == 'estable' %}
+                                <span class="referencia-activa-dot"></span>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Historial de las últimas 10 lecturas con su tendencia -->
+                <div class="tarjeta-historial-tend">
+                    <p class="tarjeta-mini-titulo">Historial reciente</p>
+                    <div class="tarjeta-tabla">
+                        <table class="tabla-datos">
+                            <thead>
+                                <tr>
+                                    <th>Fecha / Hora</th>
+                                    <th><i class="bi bi-droplet-half icono-azul"></i> Hum.</th>
+                                    <th>Estado</th>
+                                    <th>Tendencia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reg in historial %}
+                                <tr>
+                                    <td class="celda-mono">{{ reg.fecha_hora }}</td>
+                                    <td class="celda-temp">{{ reg.valor }}%</td>
+                                    <td>
+                                        {% if reg.estado == 'Alta' %}
+                                            <span class="badge-estado badge-alta">
+                                                <i class="bi bi-droplet-fill"></i> Alta
+                                            </span>
+                                        {% elif reg.estado == 'Baja' %}
+                                            <span class="badge-estado badge-baja">
+                                                <i class="bi bi-droplet"></i> Baja
+                                            </span>
+                                        {% else %}
+                                            <span class="badge-estado badge-normal">
+                                                <i class="bi bi-check-circle"></i> Normal
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if reg.tendencia == 'subiendo' %}
+                                            <span class="badge-tend badge-tend-sube">
+                                                <i class="bi bi-graph-up-arrow"></i> Subiendo
+                                            </span>
+                                        {% elif reg.tendencia == 'bajando' %}
+                                            <span class="badge-tend badge-tend-baja">
+                                                <i class="bi bi-graph-down-arrow"></i> Bajando
+                                            </span>
+                                        {% else %}
+                                            <span class="badge-tend badge-tend-estable">
+                                                <i class="bi bi-arrow-right"></i> Estable
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="celda-vacia">Sin lecturas registradas.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div><!-- /contenido -->
+</main>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'JS/dashboard.js' %}"></script>
+{% endblock %}

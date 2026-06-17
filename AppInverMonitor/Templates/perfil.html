@@ -1,0 +1,344 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Perfil{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'CSS/perfil.css' %}">
+<link rel="stylesheet" href="{% static 'CSS/dashboard.css' %}">
+
+
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-marca">
+        <img src="{% static 'IMG/logo.png' %}" alt="InverMonitor Logo" class="nav-logo-icono">
+        <span>Inver<strong>Monitor</strong></span>
+    </div>
+
+    <nav class="sidebar-nav">
+        <p class="etiqueta-grupo">Principal</p>
+        <a href="#" class="item-nav">
+            <i class="bi bi-grid-1x2"></i><span>Dashboard</span>
+        </a>
+        <a href="{% url 'temperatura' %}" class="item-nav">
+            <i class="bi bi-thermometer-half"></i><span>Temperatura</span>
+        </a>
+        <a href="{% url 'humedad' %}" class="item-nav">
+            <i class="bi bi-droplet-half"></i><span>Humedad</span>
+        </a>
+        <a href="{% url 'humedadSuelo' %}" class="item-nav">
+            <i class="bi bi-moisture"></i><span>Humedad del suelo</span>
+        </a>
+        <a href="{% url 'luminosidad' %}" class="item-nav">
+            <i class="bi bi-brightness-high"></i><span>Luminosidad</span>
+        </a>
+        
+
+        <p class="etiqueta-grupo">Análisis</p>
+        <a href="{% url 'estadistica' %}" class="item-nav">
+            <i class="bi bi-bar-chart-line"></i><span>Estadísticas</span>
+        </a>
+        <a href="{% url 'historial' %}" class="item-nav">
+            <i class="bi bi-clock-history"></i><span>Historial</span>
+        </a>
+        <a href="{% url 'notificaciones'%}" class="item-nav">
+            <i class="bi bi-bell"></i><span>Alertas</span>
+        </a>
+
+        <p class="etiqueta-grupo">Sistema</p>
+        <a href="{% url 'perfil' %}" class="item-nav activo">
+            <i class="bi bi-person"></i><span>Perfil</span>
+        </a>
+        <a href="{% url 'configuracion' %}" class="item-nav">
+            <i class="bi bi-gear"></i><span>Configuración</span>
+        </a>
+        <a href="{% url 'documentacion' %}" class="item-nav">
+            <i class="bi bi-book"></i><span>Documentación</span>
+        </a>
+        <a href="{% url 'desarrolladores'%}" class="item-nav">
+            <i class="bi bi-people"></i><span>Desarrolladores</span>
+        </a>
+    </nav>
+    <div class="pie-sidebar">
+        <form method="POST" action="{% url 'logout' %}" style="width:100%;">
+            {% csrf_token %}
+            <button type="submit" class="boton-salir">
+                <i class="bi bi-box-arrow-left"></i><span>Cerrar sesión</span>
+            </button>
+        </form>
+    </div>
+</aside>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     MAIN
+════════════════════════════════════════════════════════════ -->
+<main class="main" id="main">
+
+    <header class="topbar">
+        <div class="topbar-izquierda">
+            <button class="boton-sidebar" id="sidebarToggle" aria-label="Toggle sidebar">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="topbar-titulo">
+                <h1 class="titulo-pagina">Perfil</h1>
+                <p class="subtitulo-pagina" id="currentDate"></p>
+            </div>
+        </div>
+        <div class="topbar-derecha">
+            <button class="boton-tema" id="botonTema" title="Cambiar tema">☀️</button>
+            <div class="reloj-topbar" id="clockDisplay">00:00:00</div>
+            <div class="usuario-topbar">
+                <div class="info-usuario">
+                    <span class="nombre-usuario">{{ user.get_full_name|default:user.username }}</span>
+                    <span class="rol-usuario"></span>
+                </div>
+                <div class="avatar-usuario">
+                    {% if user.profile.photo %}
+                        <img src="{{ user.profile.photo.url }}" alt="Foto de perfil">
+                    {% else %}
+                        <i class="bi bi-person-fill"></i>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="contenido">
+
+        <!-- ═══════════════════════════════════════════════════
+             SECCIÓN 1 — Resumen del perfil
+        ════════════════════════════════════════════════════ -->
+        <section class="seccion">
+            <div class="cabecera-seccion">
+                <p class="etiqueta-seccion">Cuenta</p>
+                <h2 class="titulo-seccion">Mi perfil</h2>
+            </div>
+
+            <div class="perfil-resumen">
+
+                <!-- Avatar -->
+                <div class="perfil-avatar-wrap">
+                    <div class="perfil-avatar">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <div class="perfil-avatar-info">
+                        <p class="perfil-nombre">{{ user.get_full_name|default:user.username }}</p>
+                        <p class="perfil-username">@{{ user.username }}</p>
+                        <span class="perfil-rol-badge">
+                            <i class="bi bi-shield-check"></i> Administrador
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Datos rápidos -->
+                <div class="perfil-datos-rapidos">
+                    <div class="dato-rapido">
+                        <i class="bi bi-envelope"></i>
+                        <div>
+                            <p class="dato-rapido-etiqueta">Correo electrónico</p>
+                            <p class="dato-rapido-valor">{{ user.email|default:"—" }}</p>
+                        </div>
+                    </div>
+                    <div class="dato-rapido">
+                        <i class="bi bi-telephone"></i>
+                        <div>
+                            <p class="dato-rapido-etiqueta">Teléfono</p>
+                            <p class="dato-rapido-valor">{{ perfil.telefono|default:"—" }}</p>
+                        </div>
+                    </div>
+                    <div class="dato-rapido">
+                        <i class="bi bi-calendar3"></i>
+                        <div>
+                            <p class="dato-rapido-etiqueta">Miembro desde</p>
+                            <p class="dato-rapido-valor">{{ user.date_joined|date:"d/m/Y" }}</p>
+                        </div>
+                    </div>
+                    <div class="dato-rapido">
+                        <i class="bi bi-clock-history"></i>
+                        <div>
+                            <p class="dato-rapido-etiqueta">Último acceso</p>
+                            <p class="dato-rapido-valor">{{ user.last_login|date:"d/m/Y H:i"|default:"—" }}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════════════════════════════════════
+             SECCIÓN 2 — Editar información personal
+        ════════════════════════════════════════════════════ -->
+        <section class="seccion">
+            <div class="cabecera-seccion">
+                <p class="etiqueta-seccion">Editar</p>
+                <h2 class="titulo-seccion">Información personal</h2>
+            </div>
+
+            <div class="perfil-formulario-wrap">
+                <form method="POST" action="{% url 'perfil' %}" class="perfil-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="accion" value="actualizar_perfil">
+
+                    <div class="form-grilla">
+
+                        <div class="campo-grupo">
+                            <label class="campo-label" for="nombre">Nombre completo</label>
+                            <div class="campo-input-wrap">
+                                <i class="bi bi-person campo-icono"></i>
+                                <input
+                                    type="text"
+                                    id="nombre"
+                                    name="nombre"
+                                    class="campo-input"
+                                    value="{{ perfil.nombre|default:user.get_full_name }}"
+                                    placeholder="Tu nombre completo"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="campo-grupo">
+                            <label class="campo-label" for="telefono">Teléfono</label>
+                            <div class="campo-input-wrap">
+                                <i class="bi bi-telephone campo-icono"></i>
+                                <input
+                                    type="text"
+                                    id="telefono"
+                                    name="telefono"
+                                    class="campo-input"
+                                    value="{{ perfil.telefono|default:'' }}"
+                                    placeholder="Tu número de teléfono"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="campo-grupo">
+                            <label class="campo-label" for="email">Correo electrónico</label>
+                            <div class="campo-input-wrap">
+                                <i class="bi bi-envelope campo-icono"></i>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    class="campo-input"
+                                    value="{{ user.email|default:'' }}"
+                                    placeholder="Tu correo electrónico"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="campo-grupo">
+                            <label class="campo-label" for="username">Nombre de usuario</label>
+                            <div class="campo-input-wrap">
+                                <i class="bi bi-at campo-icono"></i>
+                                <input
+                                    type="text"
+                                    id="username"
+                                    name="username"
+                                    class="campo-input campo-input--readonly"
+                                    value="{{ user.username }}"
+                                    readonly
+                                >
+                            </div>
+                            <p class="campo-nota">El nombre de usuario no se puede cambiar.</p>
+                        </div>
+
+                    </div>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="perfil-mensaje perfil-mensaje--{{ message.tags }}">
+                                <i class="bi {% if message.tags == 'success' %}bi-check-circle{% else %}bi-exclamation-circle{% endif %}"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="form-acciones">
+                        <button type="submit" class="boton-guardar">
+                            <i class="bi bi-floppy"></i> Guardar cambios
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════════════════════════════════════
+             SECCIÓN 3 — Cambiar contraseña
+        ════════════════════════════════════════════════════ -->
+        <section class="seccion">
+            <div class="cabecera-seccion">
+                <p class="etiqueta-seccion">Seguridad</p>
+                <h2 class="titulo-seccion">Cambiar contraseña</h2>
+            </div>
+
+            <div class="perfil-formulario-wrap">
+                <form method="POST" action="{% url 'perfil' %}" class="perfil-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="accion" value="cambiar_password">
+
+                    <div class="form-grilla">
+
+                        <div class="campo-grupo campo-grupo--full">
+                            <label class="campo-label" for="password_actual">Contraseña actual</label>
+                            <div class="campo-input-wrap">
+                                <i class="bi bi-lock campo-icono"></i>
+                                <input
+                                    type="password"
+                                    id="password_actual"
+                                    name="password_actual"
+                                    class="campo-input"
+                                    placeholder="••••••••"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="campo-grupo">
+                            <label class="campo-label" for="password_nuevo">Nueva contraseña</label>
+                            <div class="campo-input-wrap">
+                                <i class="bi bi-lock-fill campo-icono"></i>
+                                <input
+                                    type="password"
+                                    id="password_nuevo"
+                                    name="password_nuevo"
+                                    class="campo-input"
+                                    placeholder="••••••••"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="campo-grupo">
+                            <label class="campo-label" for="password_confirmar">Confirmar nueva contraseña</label>
+                            <div class="campo-input-wrap">
+                                <i class="bi bi-lock-fill campo-icono"></i>
+                                <input
+                                    type="password"
+                                    id="password_confirmar"
+                                    name="password_confirmar"
+                                    class="campo-input"
+                                    placeholder="••••••••"
+                                >
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-acciones">
+                        <button type="submit" class="boton-guardar boton-guardar--seguridad">
+                            <i class="bi bi-shield-lock"></i> Actualizar contraseña
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'JS/dashboard.js' %}"></script>
+{% endblock %}

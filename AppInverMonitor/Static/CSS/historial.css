@@ -1,0 +1,104 @@
+/* ── CONTENEDOR PRINCIPAL ── */
+.tarjeta-historial {
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    margin-top: 15px;
+}
+
+.tabla-contenedor {
+    width: 100%;
+    overflow-x: auto; /* Responsivo si la pantalla es chica */
+}
+
+/* ── LA TABLA ── */
+.tabla-datos {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+.tabla-datos th {
+    background-color: #f8f9fa;
+    color: #5c6b73;
+    padding: 16px 20px;
+    font-weight: 600;
+    border-bottom: 2px solid #edf2f7;
+    white-space: nowrap;
+}
+
+.tabla-datos td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #edf2f7;
+    color: #2d3748;
+}
+
+/* Efecto Hover en las filas */
+.tabla-datos tbody tr:hover {
+    background-color: #fcfdfe;
+}
+
+/* Detalles de Texto */
+.col-fecha {
+    color: #4a5568;
+}
+.texto-atenuado {
+    color: #a0aec0;
+    font-size: 0.85rem;
+}
+
+/* ── INSIGNIAS DE ESTADO (Badges) ── */
+.insignia-estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.estado-optimo {
+    background-color: rgba(46, 204, 113, 0.15);
+    color: #27ae60;
+}
+
+.estado-alerta {
+    background-color: rgba(231, 76, 60, 0.12);
+    color: #e74c3c;
+}
+
+.estado-neutral {
+    background-color: #edf2f7;
+    color: #718096;
+}
+
+/* Resaltado de textos en alerta */
+.alerta-critica-texto {
+    color: #e74c3c;
+    font-weight: bold;
+    background: rgba(231, 76, 60, 0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Estado Vacío */
+.tabla-vacia {
+    text-align: center;
+    padding: 60px 20px !important;
+    color: #a0aec0;
+}
+.tabla-vacia i {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 12px;
+    color: #cbd5e0;
+}
+.tabla-vacia p {
+    margin: 0 0 4px 0;
+    font-weight: 600;
+    color: #718096;
+}

@@ -1,0 +1,418 @@
+/* ══════════════════════════════════════════
+   HUMEDAD — ESTADO ACTUAL
+══════════════════════════════════════════ */
+.grilla-estado-actual {
+  display:               grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap:                   16px;
+}
+
+/* ── Valor principal ── */
+.tarjeta-valor-principal {
+  background:    var(--fondo-tarjeta);
+  border:        1px solid var(--borde);
+  border-radius: var(--radio);
+  padding:       24px 26px;
+  display:       flex;
+  align-items:   center;
+  gap:           20px;
+  transition:    border-color 0.2s;
+}
+
+.tarjeta-valor-principal:hover { border-color: var(--borde-activo); }
+
+.valor-principal-icono {
+  width:           64px;
+  height:          64px;
+  border-radius:   12px;
+  background:      var(--color-azul-tenue);
+  color:           var(--color-azul);
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       30px;
+  flex-shrink:     0;
+}
+
+.valor-principal-numero {
+  font-family: var(--fuente-titulo);
+  font-size:   46px;
+  font-weight: 700;
+  color:       var(--texto);
+  line-height: 1;
+}
+
+.valor-principal-unidad {
+  font-size:   18px;
+  color:       var(--texto-secundario);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+.valor-principal-etiqueta {
+  font-size: 12px;
+  color:     var(--texto-secundario);
+  margin-top: 6px;
+}
+
+/* ── Tarjetas mini (estado / última lectura) ── */
+.tarjeta-estado-badge-wrap,
+.tarjeta-ultima-lectura {
+  background:     var(--fondo-tarjeta);
+  border:         1px solid var(--borde);
+  border-radius:  var(--radio);
+  padding:        20px 22px;
+  display:        flex;
+  flex-direction: column;
+  gap:            10px;
+  transition:     border-color 0.2s;
+}
+
+.tarjeta-estado-badge-wrap:hover,
+.tarjeta-ultima-lectura:hover { border-color: var(--borde-activo); }
+
+.tarjeta-mini-titulo {
+  font-size:      10px;
+  font-weight:    600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color:          var(--texto-tenue);
+}
+
+.tarjeta-mini-desc {
+  font-size: 12px;
+  color:     var(--texto-secundario);
+}
+
+/* Badge de estado actual */
+.estado-actual-badge {
+  display:       inline-flex;
+  align-items:   center;
+  gap:           8px;
+  font-size:     18px;
+  font-weight:   700;
+  padding:       8px 16px;
+  border-radius: var(--radio-sm);
+  width:         fit-content;
+}
+
+.estado-badge-normal { background: var(--color-verde-tenue); color: var(--color-verde); }
+.estado-badge-alta   { background: var(--color-azul-tenue);  color: var(--color-azul); }
+.estado-badge-baja   { background: var(--color-ambar-tenue); color: var(--color-ambar); }
+
+/* Última lectura */
+.ultima-lectura-valor {
+  font-size:   16px;
+  font-weight: 600;
+  color:       var(--texto);
+  display:     flex;
+  align-items: center;
+  gap:         8px;
+}
+
+.ultima-lectura-valor i { color: var(--color-verde); font-size: 14px; }
+
+/* ══════════════════════════════════════════
+   GRÁFICA EN TIEMPO REAL (imagen Matplotlib)
+══════════════════════════════════════════ */
+.tarjeta-grafica-wrap {
+  background:    var(--fondo-tarjeta);
+  border:        1px solid var(--borde);
+  border-radius: var(--radio);
+  padding:       20px 22px;
+  transition:    border-color 0.2s;
+}
+
+.tarjeta-grafica-wrap:hover { border-color: var(--borde-activo); }
+
+.grafica-cabecera {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  flex-wrap:       wrap;
+  gap:             12px;
+  margin-bottom:   16px;
+}
+
+.grafica-titulo {
+  display:     flex;
+  align-items: center;
+  gap:         8px;
+  font-size:   13px;
+  font-weight: 500;
+  color:       var(--texto);
+}
+
+.selector-rango {
+  display: flex;
+  gap:     6px;
+  flex-wrap: wrap;
+}
+
+.rango-btn {
+  font-size:     11px;
+  font-weight:   500;
+  padding:       5px 12px;
+  border-radius: var(--radio-sm);
+  border:        1px solid var(--borde);
+  color:         var(--texto-secundario);
+  transition:    border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.rango-btn:hover { border-color: var(--borde-activo); color: var(--texto); }
+
+.rango-activo {
+  background:   var(--color-azul-tenue);
+  border-color: var(--color-azul);
+  color:        var(--color-azul);
+}
+
+.grafica-cuerpo { width: 100%; }
+
+.grafica-vacia {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  justify-content:center;
+  gap:            10px;
+  padding:        50px 20px;
+  color:          var(--texto-tenue);
+}
+
+.grafica-vacia i { font-size: 32px; }
+.grafica-vacia p { font-size: 13px; }
+
+/* ══════════════════════════════════════════
+   ESTADÍSTICAS
+══════════════════════════════════════════ */
+.grilla-estadisticas {
+  display:               grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:                   12px;
+}
+
+.tarjeta-estadistica {
+  background:    var(--fondo-tarjeta);
+  border:        1px solid var(--borde);
+  border-radius: var(--radio);
+  padding:       18px 20px;
+  display:       flex;
+  align-items:   center;
+  gap:           14px;
+  transition:    border-color 0.2s;
+}
+
+.tarjeta-estadistica:hover { border-color: var(--borde-activo); }
+
+.estadistica-icono {
+  width:           40px;
+  height:          40px;
+  border-radius:   8px;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       18px;
+  flex-shrink:     0;
+}
+
+.estadistica-icono.icono-azul    { background: var(--color-azul-tenue);    color: var(--color-azul); }
+.estadistica-icono.icono-purpura { background: var(--color-purpura-tenue); color: var(--color-purpura); }
+.estadistica-icono.icono-verde   { background: var(--color-verde-tenue);   color: var(--color-verde); }
+
+.estadistica-cuerpo { display: flex; flex-direction: column; gap: 2px; }
+
+.estadistica-etiqueta {
+  font-size: 11px;
+  color:     var(--texto-secundario);
+}
+
+.estadistica-valor {
+  font-family: var(--fuente-titulo);
+  font-size:   24px;
+  font-weight: 700;
+  color:       var(--texto);
+  line-height: 1.2;
+}
+
+.estadistica-unidad {
+  font-size:   13px;
+  color:       var(--texto-secundario);
+  font-weight: 400;
+  margin-left: 3px;
+}
+
+/* ══════════════════════════════════════════
+   TENDENCIA
+══════════════════════════════════════════ */
+.grilla-tendencia {
+  display:               grid;
+  grid-template-columns: 0.9fr 1.1fr 1.4fr;
+  gap:                   16px;
+  align-items:           start;
+}
+
+.tarjeta-tendencia-principal,
+.tarjeta-referencia-tendencias,
+.tarjeta-historial-tend {
+  background:    var(--fondo-tarjeta);
+  border:        1px solid var(--borde);
+  border-radius: var(--radio);
+  padding:       20px 22px;
+  display:       flex;
+  flex-direction: column;
+  gap:           14px;
+  transition:    border-color 0.2s;
+}
+
+.tarjeta-tendencia-principal:hover,
+.tarjeta-referencia-tendencias:hover,
+.tarjeta-historial-tend:hover { border-color: var(--borde-activo); }
+
+/* Icono central de tendencia */
+.tendencia-icono-wrap {
+  width:           56px;
+  height:          56px;
+  border-radius:   50%;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       26px;
+  align-self:      center;
+}
+
+.tend-color-sube    { background: var(--color-rojo-tenue);   color: var(--color-rojo); }
+.tend-color-baja    { background: var(--color-azul-tenue);   color: var(--color-azul); }
+.tend-color-estable { background: var(--color-verde-tenue);  color: var(--color-verde); }
+
+.tendencia-label {
+  font-size:   16px;
+  font-weight: 700;
+  text-align:  center;
+}
+
+.tendencia-desc {
+  font-size:   12px;
+  color:       var(--texto-secundario);
+  text-align:  center;
+  line-height: 1.5;
+}
+
+/* Referencia de estados */
+.referencia-lista {
+  display:        flex;
+  flex-direction: column;
+  gap:            10px;
+}
+
+.referencia-item {
+  display:       flex;
+  align-items:   center;
+  gap:           12px;
+  padding:       10px 12px;
+  border-radius: var(--radio-sm);
+  border:        1px solid var(--borde);
+  position:      relative;
+  transition:    border-color 0.2s, background 0.2s;
+}
+
+.referencia-item.referencia-activa {
+  border-color: var(--borde-activo);
+  background:   var(--fondo-resaltado);
+}
+
+.referencia-icono {
+  width:           34px;
+  height:          34px;
+  border-radius:   8px;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       15px;
+  flex-shrink:     0;
+}
+
+.referencia-nombre {
+  font-size:   12.5px;
+  font-weight: 600;
+  color:       var(--texto);
+}
+
+.referencia-condicion {
+  font-size: 10.5px;
+  color:     var(--texto-tenue);
+  margin-top: 2px;
+}
+
+.referencia-activa-dot {
+  width:         8px;
+  height:        8px;
+  border-radius: 50%;
+  background:    var(--color-verde);
+  margin-left:   auto;
+  flex-shrink:   0;
+  box-shadow:    0 0 0 4px var(--color-verde-tenue);
+}
+
+/* Historial reciente — celdas extra */
+.celda-temp {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size:   13px;
+  color:       var(--texto);
+}
+
+.celda-vacia {
+  text-align: center;
+  color:      var(--texto-tenue);
+  font-size:  12px;
+  padding:    24px;
+}
+
+/* Badges de estado en tabla */
+.badge-estado {
+  display:       inline-flex;
+  align-items:   center;
+  gap:           5px;
+  font-size:     11px;
+  font-weight:   500;
+  padding:       3px 8px;
+  border-radius: 4px;
+  white-space:   nowrap;
+}
+
+.badge-normal { background: var(--color-verde-tenue); color: var(--color-verde); }
+.badge-alta   { background: var(--color-azul-tenue);  color: var(--color-azul); }
+.badge-baja   { background: var(--color-ambar-tenue); color: var(--color-ambar); }
+
+/* Badges de tendencia en tabla */
+.badge-tend {
+  display:       inline-flex;
+  align-items:   center;
+  gap:           5px;
+  font-size:     11px;
+  font-weight:   500;
+  padding:       3px 8px;
+  border-radius: 4px;
+  white-space:   nowrap;
+}
+
+.badge-tend-sube    { background: var(--color-rojo-tenue);  color: var(--color-rojo); }
+.badge-tend-baja    { background: var(--color-azul-tenue);  color: var(--color-azul); }
+.badge-tend-estable { background: var(--color-verde-tenue); color: var(--color-verde); }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media (max-width: 1280px) {
+  .grilla-estadisticas { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 1024px) {
+  .grilla-estado-actual { grid-template-columns: 1fr; }
+  .grilla-tendencia     { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .grilla-estadisticas { grid-template-columns: 1fr; }
+  .grafica-cabecera    { flex-direction: column; align-items: flex-start; }
+}

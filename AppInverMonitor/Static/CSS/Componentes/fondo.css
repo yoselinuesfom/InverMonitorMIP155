@@ -1,0 +1,20 @@
+/* FONDO */
+.fondo-cuadricula {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(26, 122, 74, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26, 122, 74, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  z-index: 0;
+  pointer-events: none;
+}
+.fondo-brillo {
+  position: fixed;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(26, 122, 74, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  transition: all 0.3s ease;
+}

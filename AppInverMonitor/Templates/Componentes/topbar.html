@@ -1,0 +1,31 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'CSS/Componentes/topbar.css' %}">
+
+<header class="topbar">
+    <div class="topbar-izquierda">
+        <button class="boton-sidebar" id="sidebarToggle" aria-label="Toggle sidebar">
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="topbar-titulo">
+            <h1 class="titulo-pagina">Dashboard</h1>
+            <p class="subtitulo-pagina" id="currentDate">—</p>
+        </div>
+    </div>
+    <div class="topbar-derecha">
+        <button class="boton-tema" id="botonTema" title="Cambiar tema">☀️</button>
+        <div class="reloj-topbar" id="clockDisplay">00:00:00</div>
+        <div class="usuario-topbar">
+            <div class="info-usuario">
+                <span class="nombre-usuario">{{ user.get_full_name|default:user.username }}</span>
+                <span class="rol-usuario">Administrador</span>
+            </div>
+            <div class="avatar-usuario">
+                {% if user.profile.photo %}
+                    <img src="{{ user.profile.photo.url }}" alt="Foto de perfil">
+                {% else %}
+                    <i class="bi bi-person-fill"></i>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</header>

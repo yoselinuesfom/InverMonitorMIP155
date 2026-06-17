@@ -1,0 +1,26 @@
+{% load static %}
+{% block title %}InverMonitor{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'CSS/colores.css' %}">
+<link rel="stylesheet" href="{% static 'CSS/layout.css' %}">
+<link rel="stylesheet" href="{% static 'CSS/dashboard.css' %}">
+
+{% include "Componentes/sidebar.html" %}
+
+<main class="main" id="main">
+    {% include "Componentes/topbar.html" %}
+
+    <div class="contenido" id="contenidoDinamico">
+        {% block modulo %}{% endblock %}
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'JS/layout.js' %}"></script>
+    <script src="{% static 'JS/Componentes/sidebar.js' %}"></script>
+    <script src="{% static 'JS/Componentes/topbar.js' %}"></script>
+    <script src="{% static 'JS/dashboard.js' %}"></script>
+    {% block modulo_scripts %}{% endblock %}
+{% endblock %}

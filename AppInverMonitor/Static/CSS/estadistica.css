@@ -1,0 +1,247 @@
+   ESTADÍSTICAS — KPIs HISTÓRICOS
+.grilla-kpi {
+  display:               grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap:                   12px;
+}
+
+.tarjeta-kpi {
+  background:    var(--fondo-tarjeta);
+  border:        1px solid var(--borde);
+  border-radius: var(--radio);
+  padding:       18px 20px;
+  display:       flex;
+  align-items:   flex-start;
+  gap:           14px;
+  transition:    border-color 0.2s;
+}
+
+.tarjeta-kpi:hover { border-color: var(--borde-activo); }
+
+.kpi-icono {
+  width:           40px;
+  height:          40px;
+  border-radius:   8px;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       18px;
+  flex-shrink:     0;
+}
+
+.kpi-cuerpo { display: flex; flex-direction: column; gap: 2px; }
+
+.kpi-etiqueta {
+  font-size: 11px;
+  color:     var(--texto-secundario);
+}
+
+.kpi-valor {
+  font-family: var(--fuente-titulo);
+  font-size:   26px;
+  font-weight: 700;
+  color:       var(--texto);
+  line-height: 1.2;
+}
+
+.kpi-unidad {
+  font-size:   13px;
+  color:       var(--texto-secundario);
+  font-weight: 400;
+  margin-left: 3px;
+}
+
+.kpi-meta {
+  font-size: 10px;
+  color:     var(--texto-tenue);
+  margin-top: 2px;
+}
+
+
+  /* GRÁFICA COMPARATIVA (imagen Matplotlib) */
+.tarjeta-grafica-wrap {
+  background:    var(--fondo-tarjeta);
+  border:        1px solid var(--borde);
+  border-radius: var(--radio);
+  padding:       20px 22px;
+  transition:    border-color 0.2s;
+}
+
+.tarjeta-grafica-wrap:hover { border-color: var(--borde-activo); }
+
+.grafica-cabecera {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  flex-wrap:       wrap;
+  gap:             12px;
+  margin-bottom:   16px;
+}
+
+.grafica-titulo {
+  display:     flex;
+  align-items: center;
+  gap:         8px;
+  font-size:   13px;
+  font-weight: 500;
+  color:       var(--texto);
+}
+
+.selector-rango {
+  display: flex;
+  gap:     6px;
+}
+
+.rango-btn {
+  font-size:     11px;
+  font-weight:   500;
+  padding:       5px 12px;
+  border-radius: var(--radio-sm);
+  border:        1px solid var(--borde);
+  color:         var(--texto-secundario);
+  transition:    border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.rango-btn:hover { border-color: var(--borde-activo); color: var(--texto); }
+
+.rango-activo {
+  background:   var(--color-verde-tenue);
+  border-color: var(--color-verde);
+  color:        var(--color-verde);
+}
+
+.grafica-cuerpo { width: 100%; }
+
+.grafica-vacia {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  justify-content:center;
+  gap:            10px;
+  padding:        50px 20px;
+  color:          var(--texto-tenue);
+}
+
+.grafica-vacia i { font-size: 32px; }
+.grafica-vacia p { font-size: 13px; }
+
+/* ══════════════════════════════════════════
+   ALERTAS DISPARADAS — TABLA
+══════════════════════════════════════════ */
+.celda-vacia {
+  text-align: center;
+  color:      var(--texto-tenue);
+  font-size:  12px;
+  padding:    24px;
+}
+
+/* ══════════════════════════════════════════
+   ALERTAS DISPARADAS — RESUMEN TOTAL
+══════════════════════════════════════════ */
+.tarjeta-riesgo-total {
+  background:    var(--fondo-tarjeta);
+  border:        1px solid var(--borde);
+  border-radius: var(--radio);
+  padding:       20px 22px;
+  display:       flex;
+  flex-direction: column;
+  gap:           14px;
+}
+
+.tarjeta-mini-titulo {
+  font-size:      10px;
+  font-weight:    600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color:          var(--texto-tenue);
+}
+
+.riesgo-total-numero {
+  font-family: var(--fuente-titulo);
+  font-size:   42px;
+  font-weight: 700;
+  color:       var(--texto);
+  line-height: 1;
+}
+
+/* Barra de proporción de alertas */
+.riesgo-barra {
+  display:       flex;
+  width:         100%;
+  height:        10px;
+  border-radius: 6px;
+  overflow:      hidden;
+  background:    var(--fondo-elevado);
+}
+
+.riesgo-barra__seg {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+/* Leyenda */
+.riesgo-leyenda {
+  display:        flex;
+  flex-direction: column;
+  gap:            8px;
+}
+
+.riesgo-leyenda__item {
+  display:     flex;
+  align-items: center;
+  gap:         8px;
+  font-size:   12px;
+  color:       var(--texto-secundario);
+}
+
+.riesgo-leyenda__item strong {
+  margin-left: auto;
+  color:       var(--texto);
+  font-size:   13px;
+}
+
+.riesgo-leyenda__dot {
+  width:         9px;
+  height:        9px;
+  border-radius: 50%;
+  flex-shrink:   0;
+}
+
+/* Fondos reutilizados para barra/leyenda (igual que iconos de variables) */
+.fondo-rojo    { background: var(--color-rojo); }
+.fondo-azul    { background: var(--color-azul); }
+.fondo-ambar   { background: var(--color-ambar); }
+.fondo-purpura { background: var(--color-purpura); }
+.fondo-verde   { background: var(--color-verde); }
+
+/* Nivel de riesgo global */
+.tarjeta-mini-desc {
+  font-size: 12px;
+  color:     var(--texto-secundario);
+}
+
+.riesgo-global {
+  font-weight: 700;
+  padding:     2px 8px;
+  border-radius: 4px;
+}
+
+.riesgo-global-bajo  { background: var(--color-verde-tenue); color: var(--color-verde); }
+.riesgo-global-medio { background: var(--color-ambar-tenue); color: var(--color-ambar); }
+.riesgo-global-alto  { background: var(--color-rojo-tenue);  color: var(--color-rojo); }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media (max-width: 1280px) {
+  .grilla-kpi { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 1024px) {
+  .dos-columnas { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .grilla-kpi { grid-template-columns: 1fr 1fr; }
+  .grafica-cabecera { flex-direction: column; align-items: flex-start; }
+}

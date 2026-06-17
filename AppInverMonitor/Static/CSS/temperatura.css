@@ -1,0 +1,510 @@
+/* SECCIÓN 1  Estado actual*/
+
+.grilla-estado-actual {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.25rem;
+}
+
+@media (max-width: 860px) {
+    .grilla-estado-actual {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .grilla-estado-actual {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Tarjeta: valor principal (temperatura numérica grande) */
+.tarjeta-valor-principal {
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-tarjeta);
+    padding: 1.5rem 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    transition: border-color 0.2s;
+}
+
+.tarjeta-valor-principal:hover {
+    border-color: var(--color-acento);
+}
+
+.valor-principal-icono {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(231, 76, 60, 0.12);
+    color: #e74c3c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.valor-principal-numero {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--color-texto-primario);
+    line-height: 1;
+    letter-spacing: -2px;
+}
+
+.valor-principal-unidad {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--color-texto-secundario);
+    letter-spacing: 0;
+}
+
+.valor-principal-etiqueta {
+    margin-top: 0.3rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-texto-secundario);
+}
+
+/* Tarjeta mini — base para "Estado" y "Última lectura" */
+.tarjeta-estado-badge-wrap,
+.tarjeta-ultima-lectura {
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-tarjeta);
+    padding: 1.5rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: border-color 0.2s;
+}
+
+.tarjeta-estado-badge-wrap:hover,
+.tarjeta-ultima-lectura:hover {
+    border-color: var(--color-acento);
+}
+
+.tarjeta-mini-titulo {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--color-texto-secundario);
+}
+
+.tarjeta-mini-desc {
+    font-size: 0.72rem;
+    color: var(--color-texto-secundario);
+    margin-top: 0.15rem;
+}
+
+/* Badge de estado: Normal / Alta / Baja */
+.estado-actual-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    width: fit-content;
+}
+
+.estado-badge-normal {
+    background: rgba(46, 204, 113, 0.12);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.3);
+}
+
+.estado-badge-alta {
+    background: rgba(231, 76, 60, 0.12);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.estado-badge-baja {
+    background: rgba(52, 152, 219, 0.12);
+    color: #3498db;
+    border: 1px solid rgba(52, 152, 219, 0.3);
+}
+
+/* Última lectura — texto con icono */
+.ultima-lectura-valor {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-texto-primario);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+
+/* ================================================================
+   SECCIÓN 2 — Gráfica
+   ================================================================ */
+
+.tarjeta-grafica-wrap {
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-tarjeta);
+    overflow: hidden;
+}
+
+.grafica-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--color-borde);
+}
+
+.grafica-titulo {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-texto-primario);
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+/* Selector de rango */
+.selector-rango {
+    display: flex;
+    gap: 0.3rem;
+    background: var(--color-fondo);
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    padding: 3px;
+}
+
+.rango-btn {
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--color-texto-secundario);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+}
+
+.rango-btn:hover {
+    color: var(--color-texto-primario);
+    background: var(--color-superficie);
+}
+
+.rango-activo {
+    background: var(--color-acento);
+    color: #fff !important;
+}
+
+/* Cuerpo de la gráfica */
+.grafica-cuerpo {
+    padding: 0.75rem 0.5rem 0.25rem;
+    min-height: 300px;
+}
+
+.grafica-cuerpo > div {
+    width: 100% !important;
+}
+
+.grafica-vacia {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    height: 280px;
+    color: var(--color-texto-secundario);
+    font-size: 0.85rem;
+}
+
+.grafica-vacia i {
+    font-size: 2.2rem;
+    opacity: 0.35;
+}
+
+
+/* ================================================================
+   SECCIÓN 3 — Estadísticas
+   ================================================================ */
+
+.grilla-estadisticas {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+}
+
+@media (max-width: 900px) {
+    .grilla-estadisticas {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .grilla-estadisticas {
+        grid-template-columns: 1fr;
+    }
+}
+
+.tarjeta-estadistica {
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-tarjeta);
+    padding: 1.25rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: border-color 0.2s, transform 0.15s;
+}
+
+.tarjeta-estadistica:hover {
+    border-color: var(--color-acento);
+    transform: translateY(-2px);
+}
+
+.estadistica-icono {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+/* Colores de iconos (mismos que el dashboard) */
+.icono-rojo    { background: rgba(231, 76,  60,  0.12); color: #e74c3c; }
+.icono-azul    { background: rgba(52,  152, 219, 0.12); color: #3498db; }
+.icono-purpura { background: rgba(155, 89,  182, 0.12); color: #9b59b6; }
+.icono-verde   { background: rgba(46,  204, 113, 0.12); color: #2ecc71; }
+.icono-ambar   { background: rgba(240, 165, 0,   0.12); color: #f0a500; }
+
+.estadistica-cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.estadistica-etiqueta {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--color-texto-secundario);
+}
+
+.estadistica-valor {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-texto-primario);
+    line-height: 1;
+    letter-spacing: -0.5px;
+}
+
+.estadistica-unidad {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--color-texto-secundario);
+}
+
+
+/* ================================================================
+   SECCIÓN 4 — Indicadores de tendencia
+   ================================================================ */
+
+.grilla-tendencia {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 1.25rem;
+}
+
+@media (max-width: 860px) {
+    .grilla-tendencia {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Tarjeta grande de tendencia actual */
+.tarjeta-tendencia-principal {
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-tarjeta);
+    padding: 1.75rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+    grid-row: 1 / 2;
+}
+
+.tendencia-icono-wrap {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    transition: transform 0.3s;
+}
+
+.tendencia-icono-wrap:hover {
+    transform: scale(1.08);
+}
+
+/* Colores de tendencia */
+.tend-color-sube   { background: rgba(231, 76,  60,  0.12); color: #e74c3c; }
+.tend-color-baja   { background: rgba(52,  152, 219, 0.12); color: #3498db; }
+.tend-color-estable{ background: var(--color-fondo);         color: var(--color-texto-secundario); }
+
+.tendencia-label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+}
+
+.tendencia-desc {
+    font-size: 0.75rem;
+    color: var(--color-texto-secundario);
+    line-height: 1.5;
+}
+
+/* Tarjeta de referencia (los 3 estados) */
+.tarjeta-referencia-tendencias {
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-tarjeta);
+    padding: 1.5rem 1.75rem;
+    grid-row: 1 / 2;
+}
+
+.referencia-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    margin-top: 0.75rem;
+}
+
+.referencia-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 0.9rem;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    transition: background 0.15s, border-color 0.15s;
+    position: relative;
+}
+
+.referencia-item:hover {
+    background: var(--color-fondo);
+}
+
+.referencia-activa {
+    background: var(--color-fondo);
+    border-color: var(--color-borde);
+}
+
+.referencia-icono {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.referencia-texto {
+    flex: 1;
+}
+
+.referencia-nombre {
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: var(--color-texto-primario);
+}
+
+.referencia-condicion {
+    font-size: 0.7rem;
+    color: var(--color-texto-secundario);
+    margin-top: 0.1rem;
+}
+
+/* Punto indicador de estado activo */
+.referencia-activa-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-acento);
+    flex-shrink: 0;
+}
+
+/* Historial en la sección 4 — ocupa toda la fila 2 */
+.tarjeta-historial-tend {
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-tarjeta);
+    padding: 1.5rem 1.75rem;
+}
+
+.tarjeta-historial-tend .tarjeta-mini-titulo {
+    margin-bottom: 0.75rem;
+}
+
+/* Tabla reutiliza .tabla-datos del dashboard */
+.celda-temp {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-texto-primario);
+}
+
+.celda-vacia {
+    text-align: center;
+    color: var(--color-texto-secundario);
+    padding: 2rem;
+    font-size: 0.85rem;
+}
+
+/* Badge de estado en tabla */
+.badge-estado,
+.badge-tend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.22rem 0.65rem;
+    border-radius: 20px;
+    font-size: 0.73rem;
+    font-weight: 500;
+}
+
+.badge-normal  { background: rgba(46,204,113,0.1); color: #2ecc71; }
+.badge-alta    { background: rgba(231,76,60,0.1);  color: #e74c3c; }
+.badge-baja    { background: rgba(52,152,219,0.1); color: #3498db; }
+
+.badge-tend-sube   { background: rgba(231,76,60,0.1);  color: #e74c3c; }
+.badge-tend-baja   { background: rgba(52,152,219,0.1); color: #3498db; }
+.badge-tend-estable{ background: var(--color-fondo);   color: var(--color-texto-secundario); }
+
+/* Animación al recibir dato nuevo */
+@keyframes parpadeo-temp {
+    0%   { opacity: 1; }
+    40%  { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+.temp-actualizado {
+    animation: parpadeo-temp 0.7s ease;
+}
