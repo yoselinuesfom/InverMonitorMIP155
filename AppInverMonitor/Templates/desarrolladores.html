@@ -73,9 +73,10 @@
             <button class="boton-sidebar" id="sidebarToggle" aria-label="Toggle sidebar">
                 <i class="bi bi-list"></i>
             </button>
-            <div class="topbar-titulo">
-                <h1 class="titulo-pagina">Desarroladores</h1>
-            </div>
+              <div class="topbar-titulo">
+              <h1 class="titulo-pagina">Desarrolladores</h1>
+              <p class="subtitulo-pagina" id="currentDate">—</p>
+          </div>
         </div>
         <div class="topbar-derecha">
             <button class="boton-tema" id="botonTema" title="Cambiar tema"><i class="bi bi-brightness-high-fill"></i></button>
@@ -147,7 +148,7 @@
               <div class="dev-contacto">
                 <span class="dev-contacto-item">
                   <i class="bi bi-envelope"></i>
-                 jo21003@ues.edu.sv
+                 uv22001@ues.edu.sv
                 </span>
               </div>
             </div>
@@ -237,4 +238,6 @@
 </main>
 {% endblock %}
 
-{% block scripts %}<script src="{% static 'JS/dashboard.js' %}"></script>{% endblock %}
+{% block scripts %}
+<script src="{% static 'JS/dashboard.js' %}">
+</script>{% endblock %}

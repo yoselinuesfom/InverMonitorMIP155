@@ -4,6 +4,8 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'CSS/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'CSS/Componentes/topbar.css' %}">
+
 
 
 <aside class="sidebar" id="sidebar">
@@ -13,7 +15,7 @@
     </div>
     <nav class="sidebar-nav">
         <p class="etiqueta-grupo">Principal</p>
-        <a href="#" class="item-nav activo">
+        <a href="{% url 'dashboard' %}" class="item-nav activo">
             <i class="bi bi-grid-1x2"></i><span>Dashboard</span>
         </a>
         <a href="{% url 'temperatura' %}" class="item-nav">
@@ -100,52 +102,7 @@
 
     <div class="contenido">
 
-        <!-- ── Estado del sistema ── -->
-        <section class="seccion">
-            <div class="cabecera-seccion">
-                <p class="etiqueta-seccion">Sistema</p>
-                <h2 class="titulo-seccion">Estado general</h2>
-            </div>
-            <div class="grilla-estado">
-                <div class="tarjeta-estado estado-ok">
-                    <div class="tarjeta-estado__icono"><i class="bi bi-check-circle"></i></div>
-                    <div class="tarjeta-estado__cuerpo">
-                        <p class="tarjeta-estado__etiqueta">Sistema</p>
-                        <p class="tarjeta-estado__valor">Operativo</p>
-                    </div>
-                </div>
-                <div class="tarjeta-estado estado-ok">
-                    <div class="tarjeta-estado__icono"><i class="bi bi-cpu"></i></div>
-                    <div class="tarjeta-estado__cuerpo">
-                        <p class="tarjeta-estado__etiqueta">Raspberry Pi</p>
-                        <p class="tarjeta-estado__valor">Conectada</p>
-                    </div>
-                </div>
-                <div class="tarjeta-estado estado-ok">
-                    <div class="tarjeta-estado__icono"><i class="bi bi-broadcast"></i></div>
-                    <div class="tarjeta-estado__cuerpo">
-                        <p class="tarjeta-estado__etiqueta">Sensores</p>
-                        <p class="tarjeta-estado__valor">En línea</p>
-                    </div>
-                </div>
-                <div class="tarjeta-estado estado-ok">
-                    <div class="tarjeta-estado__icono"><i class="bi bi-database-check"></i></div>
-                    <div class="tarjeta-estado__cuerpo">
-                        <p class="tarjeta-estado__etiqueta">Base de datos</p>
-                        <p class="tarjeta-estado__valor">Sincronizada</p>
-                    </div>
-                </div>
-                <div class="tarjeta-estado estado-neutral">
-                    <div class="tarjeta-estado__icono"><i class="bi bi-arrow-clockwise"></i></div>
-                    <div class="tarjeta-estado__cuerpo">
-                        <p class="tarjeta-estado__etiqueta">Última actualización</p>
-                        <p class="tarjeta-estado__valor">
-                            {% if ultimo %}{{ ultimo.fecha_hora|timesince }} atrás{% else %}Sin datos{% endif %}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
+     
 
         <!-- ── Indicadores del día ── -->
         <section class="seccion">
@@ -360,8 +317,11 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'JS/dashboard.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'JS/dashboard.js' %}"></script>
+<script rel="stylesheet" href="{% static 'JS/Componentes/topbar.js' %}"></script>
+
+
 <script>
     const labels    = {{ labels|safe }};
     const dataTemp  = {{ data_temp|safe }};

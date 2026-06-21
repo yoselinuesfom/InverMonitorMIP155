@@ -1,6 +1,3 @@
-// ══════════════════════════════════════════
-//  RELOJ EN TIEMPO REAL
-// ══════════════════════════════════════════
 function actualizarReloj() {
     const ahora = new Date();
 
@@ -44,7 +41,17 @@ const temaGuardado = localStorage.getItem('tema') || 'oscuro';
 
 function aplicarTema(tema) {
     document.documentElement.setAttribute('data-tema', tema === 'claro' ? 'claro' : '');
-    if (botonTema) botonTema.textContent = tema === 'claro' ? '🌙' : '☀️';
+    if (botonTema) {
+        const icono = botonTema.querySelector('i');
+        if (icono) {
+            icono.className = tema === 'claro' ? 'bi bi-moon-stars-fill' : 'bi bi-brightness-high-fill';
+        } else {
+            // Si el botón no tiene <i> adentro (como en el topbar.html duplicado), lo crea
+            botonTema.innerHTML = tema === 'claro'
+                ? '<i class="bi bi-moon-stars-fill"></i>'
+                : '<i class="bi bi-brightness-high-fill"></i>';
+        }
+    }
     localStorage.setItem('tema', tema);
 }
 

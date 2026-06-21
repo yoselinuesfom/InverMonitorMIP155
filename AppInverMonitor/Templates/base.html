@@ -12,7 +12,7 @@
     <!-- Estilos específicos para cada página -->
     <link rel="stylesheet" href="{% static 'CSS/home.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/register.css' %}">
-    <link rel="stylesheet" href="{% static 'Componentes/CSS/animaciones.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/Componentes/animaciones.css' %}">
 
     <!-- Fuentes -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -26,15 +26,18 @@
 
     {% block dashboard %}
         <script src="{% static 'CSS/dashboard.css' %}"></script>
-        <script src="{% static 'JS/dashboard.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'CSS/Componentes/topbar.css' %}">
     {% endblock %}
 
     {% block scripts %}
-        <script src="{% static 'JS/home.js' %}"></script>
-        <script src="{% static 'JS/register.js' %}"></script>
-        <script src="{% static 'JS/register.js' %}"></script>
-        <script src="{% static 'Componentes/JS/animaciones.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+        <script src="{% static 'JS/home.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'JS/Componentes/topbar.js' %}">
+        <script src="{% static 'JS/register.js' %}"></script>
+        <script src="{% static 'JS/register.js' %}"></script>
+        <script src="{% static 'JS/Componentes/animaciones.js' %}"></script>
     {% endblock %}
 
 </html>
