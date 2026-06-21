@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from .models import NotificacionAlerta
 
 
-@login_required
+@login_required(login_url='login')
 def Notificaciones(request):
     usuario = request.user
 

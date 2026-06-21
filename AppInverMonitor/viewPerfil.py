@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import PerfilUsuario  
 
-@login_required(login_url='/login/')
+@login_required(login_url='login')
 def Perfil(request):
     usuario = request.user
     perfil, _ = PerfilUsuario.objects.get_or_create(

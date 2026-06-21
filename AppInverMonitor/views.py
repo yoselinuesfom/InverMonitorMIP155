@@ -24,11 +24,11 @@ import base64
 def Home(request):
     return render(request, 'home.html')
 
-
+@login_required(login_url='login')
 def Desarrolladores(request):
     return render(request, 'desarrolladores.html')
 
-
+@login_required(login_url='login')
 def Documentacion(request):
     return render(request, 'documentacion.html')
 
@@ -51,7 +51,7 @@ def Register(request):
     else:
         form = RegistrarUsuarioForm()
 
-    return render(request, 'Register.html', {'form': form})
+    return render(request, 'register.html', {'form': form})
 
 
 @never_cache

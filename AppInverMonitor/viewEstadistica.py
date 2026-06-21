@@ -22,7 +22,7 @@ COLOR_LUX         = '#f0a500'
 
 RANGOS_DIAS = {'7d': 7, '30d': 30, '90d': 90}
 
-@login_required
+@login_required(login_url='login')
 def Estadistica(request):
     rango_activo = request.GET.get('rango', '7d')
     dias = RANGOS_DIAS.get(rango_activo, 7)

@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .models import ConfiguracionAlarma
 from .formConfiguracion import ConfiguracionAlarmaForm  # Importa tu nuevo formulario
 
-@login_required
+@login_required(login_url='login')
 def Configuracion(request):
     config_instancia = request.user.config_alarma
     if request.method == 'POST':

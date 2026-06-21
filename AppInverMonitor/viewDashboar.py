@@ -5,7 +5,7 @@ from datetime import timedelta
 from django.db.models import Max, Min, Avg
 from .models import RegistroSensor
 
-@login_required
+@login_required(login_url='login')
 def Dashboard(request):
     usuario = request.user
     hoy = timezone.now().date()

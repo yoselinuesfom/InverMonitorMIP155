@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
+from datetime import timedelta
+from django.utils import timezone
 
 class PerfilUsuario(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil')
@@ -81,7 +83,21 @@ class NotificacionAlerta(models.Model):
         return f"{self.get_sensor_display()} {self.get_tipo_display()} — {self.usuario.username} — {self.fecha_hora:%Y-%m-%d %H:%M}"
 
 
-# Signals 
+class UltimaAlertaEnviar(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ultimas_alertas')
+    sensor = models.CharField(max_length=50)  # Almacena 'temperatura', 'humedad', etc.
+    fecha_envio = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('usuario', 'sensor')
+
+    def __str__(self):
+        return f"Última alerta {self.sensor} para {self.usuario.username}"
+
+
+# =========================================================================
+# SIGNALS AUTOMÁTICOS
+# =========================================================================
 
 @receiver(post_save, sender=User)
 def crear_perfil_usuario(sender, instance, created, **kwargs):
@@ -101,86 +117,106 @@ def verificar_alertas_sensor(sender, instance, created, **kwargs):
     if not created:
         return
 
-    usuario = instance.usuario
-    try:
-        config = usuario.config_alarma
-    except ConfiguracionAlarma.DoesNotExist:
-        return
+    ahora = timezone.now()
+    hace_minutos = ahora - timedelta(minutes=5)
 
-    correo_destino = config.correo_alerta or usuario.email
-    if not correo_destino:
-        print(f"Sin correo para {usuario.username}")
-        return
+    # Itera de forma independiente sobre cada usuario del sistema
+    todas_las_configs = ConfiguracionAlarma.objects.select_related('usuario').all()
 
-    anomalias = []
+    for config in todas_las_configs:
+        usuario_actual = config.usuario
+        correo_destino = config.correo_alerta or usuario_actual.email
 
-    if instance.temperatura > config.temp_max:
-        anomalias.append({'sensor': 'temperatura', 'tipo': 'alta', 'valor': instance.temperatura,
-            'umbral_min': config.temp_min, 'umbral_max': config.temp_max,
-            'texto': f"Temperatura CRÍTICA ALTA: {instance.temperatura}°C (Máx: {config.temp_max}°C)"})
-    elif instance.temperatura < config.temp_min:
-        anomalias.append({'sensor': 'temperatura', 'tipo': 'baja', 'valor': instance.temperatura,
-            'umbral_min': config.temp_min, 'umbral_max': config.temp_max,
-            'texto': f"Temperatura CRÍTICA BAJA: {instance.temperatura}°C (Mín: {config.temp_min}°C)"})
+        if not correo_destino:
+            continue
 
-    if instance.humedad > config.hum_max:
-        anomalias.append({'sensor': 'humedad', 'tipo': 'alta', 'valor': instance.humedad,
-            'umbral_min': config.hum_min, 'umbral_max': config.hum_max,
-            'texto': f"Humedad CRÍTICA ALTA: {instance.humedad}% (Máx: {config.hum_max}%)"})
-    elif instance.humedad < config.hum_min:
-        anomalias.append({'sensor': 'humedad', 'tipo': 'baja', 'valor': instance.humedad,
-            'umbral_min': config.hum_min, 'umbral_max': config.hum_max,
-            'texto': f"Humedad CRÍTICA BAJA: {instance.humedad}% (Mín: {config.hum_min}%)"})
+        # --- NIVEL 1 DETECCIÓN DE INCENDIOS (SIN COOLDOWN) ---
+        if instance.temperatura >= 50.0:
+            asunto_incendio = f"¡EMERGENCIA CRÍTICA: INCENDIO! — {usuario_actual.username}"
+            cuerpo_incendio = (
+                f"¡ATENCIÓN {usuario_actual.username.upper()}!\n\n"
+                f"Se ha detectado una temperatura extrema de {instance.temperatura}°C en el invernadero.\n"
+                f"Riesgo inminente de destrucción de hardware. Tome medidas inmediatas.\n\n"
+                f"Fecha/Hora: {instance.fecha_hora.strftime('%Y-%m-%d %H:%M:%S')}"
+            )
+            try:
+                send_mail(subject=asunto_incendio, message=cuerpo_incendio, from_email=None, recipient_list=[correo_destino], fail_silently=True)
+            except Exception as e:
+                print(f"Error al enviar correo de incendio: {e}")
+            continue  # Salta a evaluar al próximo usuario
 
-    if instance.luminosidad > config.lux_max:
-        anomalias.append({'sensor': 'luminosidad', 'tipo': 'alta', 'valor': instance.luminosidad,
-            'umbral_min': config.lux_min, 'umbral_max': config.lux_max,
-            'texto': f"Luminosidad CRÍTICA ALTA: {instance.luminosidad} Lx (Máx: {config.lux_max} Lx)"})
-    elif instance.luminosidad < config.lux_min:
-        anomalias.append({'sensor': 'luminosidad', 'tipo': 'baja', 'valor': instance.luminosidad,
-            'umbral_min': config.lux_min, 'umbral_max': config.lux_max,
-            'texto': f"Luminosidad CRÍTICA BAJA: {instance.luminosidad} Lx (Mín: {config.lux_min} Lx)"})
+        # --- NIVEL 2 ANOMALÍAS ORDINARIAS SEGÚN LÍMITES INDIVIDUALES ---
+        anomalias_detectadas = []
 
-    if instance.humedad_suelo > config.suelo_max:
-        anomalias.append({'sensor': 'humedad_suelo', 'tipo': 'alta', 'valor': instance.humedad_suelo,
-            'umbral_min': config.suelo_min, 'umbral_max': config.suelo_max,
-            'texto': f"Humedad suelo CRÍTICA ALTA: {instance.humedad_suelo}% (Máx: {config.suelo_max}%)"})
-    elif instance.humedad_suelo < config.suelo_min:
-        anomalias.append({'sensor': 'humedad_suelo', 'tipo': 'baja', 'valor': instance.humedad_suelo,
-            'umbral_min': config.suelo_min, 'umbral_max': config.suelo_max,
-            'texto': f"Humedad suelo CRÍTICA BAJA: {instance.humedad_suelo}% (Mín: {config.suelo_min}%)"})
+        # Temperatura
+        if instance.temperatura > config.temp_max:
+            anomalias_detectadas.append({'sensor': 'temperatura', 'tipo': 'alta', 'valor': instance.temperatura, 'umbral_min': config.temp_min, 'umbral_max': config.temp_max, 'texto': f"Temperatura CRÍTICA ALTA: {instance.temperatura}°C (Máx: {config.temp_max}°C)"})
+        elif instance.temperatura < config.temp_min:
+            anomalias_detectadas.append({'sensor': 'temperatura', 'tipo': 'baja', 'valor': instance.temperatura, 'umbral_min': config.temp_min, 'umbral_max': config.temp_max, 'texto': f"Temperatura CRÍTICA BAJA: {instance.temperatura}°C (Mín: {config.temp_min}°C)"})
 
-    if not anomalias:
-        return
+        # Humedad Ambiente
+        if instance.humedad > config.hum_max:
+            anomalias_detectadas.append({'sensor': 'humedad', 'tipo': 'alta', 'valor': instance.humedad, 'umbral_min': config.hum_min, 'umbral_max': config.hum_max, 'texto': f"Humedad CRÍTICA ALTA: {instance.humedad}% (Máx: {config.hum_max}%)"})
+        elif instance.humedad < config.hum_min:
+            anomalias_detectadas.append({'sensor': 'humedad', 'tipo': 'baja', 'valor': instance.humedad, 'umbral_min': config.hum_min, 'umbral_max': config.hum_max, 'texto': f"Humedad CRÍTICA BAJA: {instance.humedad}% (Mín: {config.hum_min}%)"})
 
-    for a in anomalias:
-        NotificacionAlerta.objects.create(
-            usuario          = usuario,
-            sensor           = a['sensor'],
-            tipo             = a['tipo'],
-            valor            = a['valor'],
-            umbral_min       = a['umbral_min'],
-            umbral_max       = a['umbral_max'],
-            correo_enviado_a = correo_destino,
-        )
+        # Luminosidad
+        if instance.luminosidad > config.lux_max:
+            anomalias_detectadas.append({'sensor': 'luminosidad', 'tipo': 'alta', 'valor': instance.luminosidad, 'umbral_min': config.lux_min, 'umbral_max': config.lux_max, 'texto': f"Luminosidad CRÍTICA ALTA: {instance.luminosidad} Lx (Máx: {config.lux_max} Lx)"})
+        elif instance.luminosidad < config.lux_min:
+            anomalias_detectadas.append({'sensor': 'luminosidad', 'tipo': 'baja', 'valor': instance.luminosidad, 'umbral_min': config.lux_min, 'umbral_max': config.lux_max, 'texto': f"Luminosidad CRÍTICA BAJA: {instance.luminosidad} Lx (Mín: {config.lux_min} Lx)"})
 
-    asunto = f"ALERTA INVERNADERO — {usuario.username}"
-    cuerpo = (
-        f"Estimado/a {usuario.username},\n\n"
-        f"Se han detectado lecturas fuera de los rangos óptimos en tu invernadero.\n\n"
-        f"Detalles de las anomalías:\n"
-        + "".join(f"  • {a['texto']}\n" for a in anomalias)
-        + f"\nFecha y Hora: {instance.fecha_hora.strftime('%Y-%m-%d %H:%M:%S')}\n"
-        f"Revisa tu panel en InverMonitor.\n\n"
-        f"Atentamente,\nSistema Automatizado InverMonitor."
-    )
+        # Humedad del Suelo
+        if instance.humedad_suelo > config.suelo_max:
+            anomalias_detectadas.append({'sensor': 'humedad_suelo', 'tipo': 'alta', 'valor': instance.humedad_suelo, 'umbral_min': config.suelo_min, 'umbral_max': config.suelo_max, 'texto': f"Humedad suelo CRÍTICA ALTA: {instance.humedad_suelo}% (Máx: {config.suelo_max}%)"})
+        elif instance.humedad_suelo < config.suelo_min:
+            anomalias_detectadas.append({'sensor': 'humedad_suelo', 'tipo': 'baja', 'valor': instance.humedad_suelo, 'umbral_min': config.suelo_min, 'umbral_max': config.suelo_max, 'texto': f"Humedad suelo CRÍTICA BAJA: {instance.humedad_suelo}% (Mín: {config.suelo_min}%)"})
 
-    try:
-        send_mail(
-            subject=asunto, message=cuerpo,
-            from_email=None, recipient_list=[correo_destino],
-            fail_silently=False,
-        )
-        print(f"Correo enviado a {correo_destino} ({len(anomalias)} anomalías)")
-    except Exception as e:
-        print(f"Error al enviar correo: {e}")
+        # --- FILTRADO DE CONTENCIÓN POR COOLDOWN (10 MINUTOS) ---
+        anomalias_a_notificar_por_correo = []
+
+        for a in anomalias_detectadas:
+            # Comprueba si el sensor específico ya notificó a este usuario en la ventana temporal
+            ya_notificado = UltimaAlertaEnviar.objects.filter(
+                usuario=usuario_actual,
+                sensor=a['sensor'],
+                fecha_envio__gte=hace_minutos
+            ).exists()
+
+            if not ya_notificado:
+                # Almacena de forma persistente la alerta para el panel web de este usuario
+                NotificacionAlerta.objects.create(
+                    usuario          = usuario_actual,
+                    sensor           = a['sensor'],
+                    tipo             = a['tipo'],
+                    valor            = a['valor'],
+                    umbral_min       = a['umbral_min'],
+                    umbral_max       = a['umbral_max'],
+                    correo_enviado_a = correo_destino,
+                )
+                anomalias_a_notificar_por_correo.append(a)
+
+                # Reinicia el cronómetro de 10 minutos para este sensor/usuario
+                UltimaAlertaEnviar.objects.update_or_create(
+                    usuario=usuario_actual,
+                    sensor=a['sensor'],
+                    defaults={'fecha_envio': ahora}
+                )
+
+        # Despacha un único correo unificado con las anomalías permitidas del usuario
+        if anomalias_a_notificar_por_correo:
+            asunto = f"ALERTA INVERNADERO — {usuario_actual.username}"
+            cuerpo = (
+                f"Estimado/a {usuario_actual.username},\n\n"
+                f"Se han detectado lecturas fuera de tus rangos configurados en el invernadero.\n\n"
+                f"Detalles de tus anomalías:\n"
+                + "".join(f"  • {a['texto']}\n" for a in anomalias_a_notificar_por_correo)
+                + f"\nFecha y Hora: {instance.fecha_hora.strftime('%Y-%m-%d %H:%M:%S')}\n"
+                f"Revisa tu panel personalizado en InverMonitor.\n\n"
+                f"Atentamente,\nSistema Automatizado InverMonitor."
+            )
+            try:
+                send_mail(subject=asunto, message=cuerpo, from_email=None, recipient_list=[correo_destino], fail_silently=False)
+                print(f"Correo enviado a {correo_destino} ({len(anomalias_a_notificar_por_correo)} anomalías ordinarias)")
+            except Exception as e:
+                print(f"Error al enviar correo ordinario a {correo_destino}: {e}")

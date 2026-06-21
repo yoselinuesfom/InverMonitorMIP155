@@ -5,7 +5,9 @@ from django.contrib import admin
 from .models import PerfilUsuario
 from .models import ConfiguracionAlarma
 from .models import RegistroSensor
+from .models import UltimaAlertaEnviar
 
+admin.site.register(UltimaAlertaEnviar)
 admin.site.register(PerfilUsuario)
 admin.site.register(ConfiguracionAlarma)
 admin.site.register(RegistroSensor)

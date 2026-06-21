@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
 from .models import RegistroSensor  
 
 @csrf_exempt
@@ -11,11 +12,10 @@ def RecibirDatosSensor(request):
             luz   = float(request.POST.get('luminosidad', 0))
             suelo = float(request.POST.get('humedad_suelo', 0))
 
-            from django.contrib.auth.models import User 
-            usuario = User.objects.first()  
+            usuario_dueno = User.objects.first()  
             
             nuevo_registro = RegistroSensor.objects.create(
-                usuario       = usuario, 
+                usuario       = usuario_dueno, 
                 temperatura   = temp,
                 humedad       = hum,
                 luminosidad   = luz,

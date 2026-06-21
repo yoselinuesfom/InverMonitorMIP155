@@ -57,7 +57,7 @@ ROOT_URLCONF = 'InverMonitor.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'AppInverMonitor' / 'Templates', ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -117,9 +117,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
+#SOLO PARA EL CSS
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    #os.path.join(BASE_DIR, 'Static'),
+    BASE_DIR / 'AppInverMonitor' / 'Static',
+]
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
 # Default primary key field type
@@ -139,5 +145,12 @@ EMAIL_HOST_PASSWORD = 'gytt vceh zupv vrsc'
 DEFAULT_FROM_EMAIL = f'InverMonitor Alertas <{EMAIL_HOST_USER}>'
 
 #para cerrar secion cada que cierre pag3 despues de cada inactividad 
-SESSION_COOKIE_AGE = 1800
-SESSION_SAVE_EVERY_REQUEST = True 
+#SESSION_COOKIE_AGE = 1800
+#SESSION_SAVE_EVERY_REQUEST = True 
+
+# Sesiones e Inactividad
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Archivos Media
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

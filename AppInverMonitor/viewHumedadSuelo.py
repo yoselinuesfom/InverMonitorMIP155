@@ -50,7 +50,7 @@ def _generar_grafica(registros, umbral_min, umbral_max):
     return base64.b64encode(buf.read()).decode('utf-8')
 
 
-@login_required
+@login_required(login_url='login')
 def HumedadSuelo(request):
     usuario    = request.user
     rango      = request.GET.get('rango', '24h')

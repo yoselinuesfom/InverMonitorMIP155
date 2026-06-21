@@ -20,7 +20,7 @@ COLOR_HUM         = '#3daaf0'
 
 RANGOS_HORAS = {'1h': 1, '24h': 24, '7d': 24 * 7, '30d': 24 * 30}
 
-@login_required
+@login_required(login_url='login')
 def Humedad(request):
     usuario = request.user
     rango_activo = request.GET.get('rango', '24h')
