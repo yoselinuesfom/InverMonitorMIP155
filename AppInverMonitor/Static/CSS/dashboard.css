@@ -36,8 +36,8 @@
   --color-purpura-tenue: rgba(167, 139, 250, 0.12);
 
   /* ── Tipografía ── */
-  --fuente-titulo:  'Playfair Display', serif;
-  --fuente-cuerpo:  'DM Sans', sans-serif;
+  --fuente-titulo:  'Trebuchet MS', 'Gill Sans', 'Century Gothic', Arial, sans-serif;
+  --fuente-cuerpo:  'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
 
   /* ── Espaciado ── */
   --ancho-sidebar:  240px;
@@ -50,23 +50,43 @@
 }
 
 /* ══════════════════════════════════════════
-   MODO CLARO
+   MODO CLARO  — colores rediseñados
+   Filosofía: fondos cálidos verdosos, texto
+   casi negro, acentos saturados, bordes
+   visibles. Sin transparencias que apaguen.
 ══════════════════════════════════════════ */
 [data-tema="claro"] {
-  --fondo:           #f0f7f2;
-  --fondo-elevado:   #e4f0e8;
-  --fondo-tarjeta:   #ffffff;
-  --fondo-resaltado: #d6eadc;
-  --texto:           #0d1f12;
-  --texto-secundario:#2e6644;
-  --texto-tenue:     #6aaa7a;
-  --borde:           rgba(26, 122, 74, 0.18);
-  --borde-activo:    rgba(26, 122, 74, 0.5);
+  /* Fondos — blancos y verdosos muy suaves */
+  --fondo:             #f2f9f5;
+  --fondo-elevado:     #e4f2ea;
+  --fondo-tarjeta:     #ffffff;
+  --fondo-resaltado:   #d4eddf;
 
-  /* Aliases modo claro */
-  --fondo-oscuro:    #f0f7f2;
-  --texto-principal: #0d1f12;
-  --borde-sutil:     rgba(26, 122, 74, 0.18);
+  /* Texto — máximo contraste */
+  --texto:             #050f08;
+  --texto-secundario:  #083318;
+  --texto-tenue:       #1a5c32;
+
+  /* Bordes — visibles y definidos */
+  --borde:             #9ecfb3;
+  --borde-activo:      #1a7a4a;
+
+  /* Aliases */
+  --fondo-oscuro:      #f2f9f5;
+  --texto-principal:   #050f08;
+  --borde-sutil:       #9ecfb3;
+
+  /* Colores semánticos — más saturados en claro */
+  --color-verde:         #16a34a;
+  --color-verde-tenue:   #dcfce7;
+  --color-rojo:          #dc2626;
+  --color-rojo-tenue:    #fee2e2;
+  --color-azul:          #2563eb;
+  --color-azul-tenue:    #dbeafe;
+  --color-ambar:         #d97706;
+  --color-ambar-tenue:   #fef3c7;
+  --color-purpura:       #7c3aed;
+  --color-purpura-tenue: #ede9fe;
 
   --icono-tema: '🌙';
 }
@@ -118,12 +138,19 @@ button { cursor: pointer; font-family: inherit; }
   padding:       20px 20px 16px;
   border-bottom: 1px solid var(--borde);
   font-family:   var(--fuente-titulo);
-  font-size:     17px;
+  font-size:     19px;
+  font-weight:   400;
+  letter-spacing: 0.5px;
   color:         var(--texto-secundario);
 }
 
-.sidebar-marca i      { font-size: 20px; color: var(--color-verde); }
-.sidebar-marca strong { color: var(--texto); font-weight: 700; }
+.sidebar-marca i      { font-size: 22px; color: var(--color-verde); }
+.sidebar-marca strong {
+  color:        var(--texto);
+  font-weight:  700;
+  font-size:    20px;
+  letter-spacing: 0.3px;
+}
 
 .sidebar-nav {
   flex:            1;
@@ -134,12 +161,13 @@ button { cursor: pointer; font-family: inherit; }
 }
 
 .etiqueta-grupo {
-  font-size:      10px;
-  font-weight:    600;
-  letter-spacing: 1.8px;
+  font-size:      9.5px;
+  font-weight:    700;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
-  color:          var(--texto-tenue);
-  padding:        16px 8px 6px;
+  color:          var(--color-verde);
+  padding:        20px 8px 6px;
+  opacity:        0.75;
 }
 
 .item-nav {
@@ -149,8 +177,9 @@ button { cursor: pointer; font-family: inherit; }
   padding:        9px 12px;
   border-radius:  var(--radio-sm);
   color:          var(--texto-secundario);
-  font-size:      13.5px;
-  font-weight:    400;
+  font-size:      14px;
+  font-weight:    500;
+  letter-spacing: 0.1px;
   transition:     background 0.15s, color 0.15s;
   position:       relative;
 }
@@ -159,10 +188,13 @@ button { cursor: pointer; font-family: inherit; }
 .item-nav:hover  { background: var(--fondo-resaltado); color: var(--texto); }
 .item-nav.activo { background: var(--color-verde-tenue); color: var(--color-verde); font-weight: 500; }
 
+/* Modo claro: el item activo necesita texto más oscuro para legibilidad */
+[data-tema="claro"] .item-nav.activo { color: var(--verde-principal); }
+
 .insignia-nav {
   margin-left:   auto;
   background:    var(--color-rojo);
-  color:         var(--fondo);
+  color:         #ffffff;
   font-size:     10px;
   font-weight:   700;
   padding:       1px 6px;
@@ -230,17 +262,19 @@ button { cursor: pointer; font-family: inherit; }
 }
 
 .titulo-pagina {
-  font-family: var(--fuente-titulo);
-  font-size:   18px;
-  font-weight: 700;
-  color:       var(--texto);
-  line-height: 1.1;
+  font-family:    var(--fuente-titulo);
+  font-size:      22px;
+  font-weight:    700;
+  letter-spacing: 0.4px;
+  color:          var(--texto);
+  line-height:    1.1;
 }
 
 .subtitulo-pagina {
-  font-size:   12px;
-  color:       var(--texto-secundario);
-  font-weight: 300;
+  font-size:      12.5px;
+  color:          var(--texto-secundario);
+  font-weight:    400;
+  letter-spacing: 0.2px;
 }
 
 .topbar-derecha { display: flex; align-items: center; gap: 16px; }
@@ -268,6 +302,9 @@ button { cursor: pointer; font-family: inherit; }
   padding:              5px 12px;
   border-radius:        var(--radio-sm);
 }
+
+/* Modo claro: reloj con más contraste */
+[data-tema="claro"] .reloj-topbar { color: var(--texto); }
 
 .usuario-topbar { display: flex; align-items: center; gap: 12px; }
 .info-usuario   { text-align: right; }
@@ -571,6 +608,9 @@ button { cursor: pointer; font-family: inherit; }
   background:     var(--fondo-elevado);
   white-space:    nowrap;
 }
+
+/* Modo claro: encabezados tabla con más presencia */
+[data-tema="claro"] .tabla-datos th { color: var(--texto-secundario); }
 
 .tabla-datos td {
   padding:        12px 16px;
