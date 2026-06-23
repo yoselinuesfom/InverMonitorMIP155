@@ -508,3 +508,160 @@
 .temp-actualizado {
     animation: parpadeo-temp 0.7s ease;
 }
+
+
+/* ================================================================
+   RESPONSIVE — temperatura.css
+   ================================================================ */
+
+/* Tablet (≤ 860px) */
+@media (max-width: 860px) {
+
+    /* Sidebar se oculta, main ocupa todo */
+    .sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 999;
+        height: 100vh;
+    }
+
+    .sidebar.abierto {
+        transform: translateX(0);
+    }
+
+    .main {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+
+    /* Topbar */
+    .reloj-topbar {
+        display: none;
+    }
+
+    .usuario-topbar .nombre-usuario,
+    .usuario-topbar .rol-usuario {
+        display: none;
+    }
+
+    /* Grillas */
+    .grilla-estado-actual {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .tarjeta-valor-principal {
+        grid-column: 1 / -1;
+    }
+
+    .grilla-estadisticas {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* Tendencia */
+    .grilla-tendencia {
+        grid-template-columns: 1fr;
+    }
+
+    .tarjeta-tendencia-principal {
+        grid-row: auto;
+    }
+
+    .tarjeta-referencia-tendencias {
+        grid-row: auto;
+    }
+
+    .tarjeta-historial-tend {
+        grid-column: 1;
+        grid-row: auto;
+    }
+
+    /* Selector de rango en gráfica */
+    .grafica-cabecera {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .selector-rango {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .rango-btn {
+        flex: 1;
+        text-align: center;
+    }
+
+    /* Tabla historial scrolleable */
+    .tarjeta-tabla {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tabla-datos {
+        min-width: 520px;
+    }
+}
+
+/* Móvil (≤ 560px) */
+@media (max-width: 560px) {
+
+    /* Topbar compacta */
+    .topbar {
+        padding: 0.6rem 1rem;
+        gap: 0.5rem;
+    }
+
+    .titulo-pagina {
+        font-size: 1.1rem;
+    }
+
+    .subtitulo-pagina {
+        display: none;
+    }
+
+    .boton-tema {
+        display: none;
+    }
+
+    /* Todo en 1 columna */
+    .grilla-estado-actual {
+        grid-template-columns: 1fr;
+    }
+
+    .tarjeta-valor-principal {
+        grid-column: auto;
+    }
+
+    .grilla-estadisticas {
+        grid-template-columns: 1fr;
+    }
+
+    /* Valor principal más pequeño */
+    .valor-principal-numero {
+        font-size: 2.2rem;
+    }
+
+    /* Estadísticas: icono + texto en fila */
+    .tarjeta-estadistica {
+        padding: 1rem;
+    }
+
+    .estadistica-valor {
+        font-size: 1.5rem;
+    }
+
+    /* Selector rango: texto corto */
+    .rango-btn {
+        font-size: 0.68rem;
+        padding: 0.28rem 0.5rem;
+    }
+
+    /* Secciones menos padding */
+    .seccion {
+        margin-bottom: 1.25rem;
+    }
+
+    .contenido {
+        padding: 1rem;
+    }
+}

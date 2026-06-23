@@ -154,3 +154,9 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # Archivos Media
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+"""ALLOWED_HOSTS = [
+    'jo21003.pythonanywhere.com',
+]"""
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
